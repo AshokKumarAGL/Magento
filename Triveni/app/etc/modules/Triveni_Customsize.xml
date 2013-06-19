@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Triveni_Customsize>
+            <active>true</active>
+            <codePool>local</codePool>
+        </Triveni_Customsize>
+    </modules>
+</config>

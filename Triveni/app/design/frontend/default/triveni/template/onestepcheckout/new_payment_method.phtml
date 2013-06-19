@@ -1,0 +1,213 @@
+<?php
+/**
+ * @author     Komal Chitkara
+ */
+
+$helper = Mage::helper('onestepcheckout/checkout');
+
+$cats = array();
+$couponCanUse = true;
+
+$hide_nonfree_methods = false;
+if($helper->settings['hide_nonfree_payment_methods']) {
+    foreach($this->getMethods() as $_method) {
+        if($_method->getCode() == 'free') {
+            $hide_nonfree_methods = true;
+        }
+    }
+}
+
+?>
+<div class="payment-methods">
+    <script type="text/javascript">
+        //<![CDATA[
+<?php echo $this->getChildHtml('reward.scripts'); ?>
+<?php echo $this->getChildHtml('customerbalance_scripts'); ?>
+          var payment = new Payment('checkout-payment-method-load', '<?php echo $this->getUrl('checkout/onepage/savePayment') ?>');
+          //]]>
+    </script>
+    <?php if(str_replace('.', '', Mage::getVersion()) > 1600):?>
+        <?php echo $this->getChildHtml('customerbalance'); ?>
+        <?php echo $this->getChildHtml('reward.points'); ?>
+<?php endif;?>
+    <dl id="checkout-payment-method-load">
+        <?php foreach ($this->getMethods() as $_method): $_code = $_method->getCode() ?>
+    <?php if(($hide_nonfree_methods && $_code != 'free') || $_code == 'citrus_standard') continue;?>
+        <dt class="p-method-label">
+    <?php if( sizeof($this->getMethods()) > 1 ): ?>
+            <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="radio" <?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> <?php if($this->getSelectedMethodCode()=='checkmo' && $this->getDisableCod()): ?> disabled="disabled"<?php endif; ?> />
+    <?php else: ?>
+            <span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" /></span>
+    <?php endif; ?>
+            <label for="p_method_<?php echo $_code ?>"><?php echo $_method->getTitle() ?><?php if($_code=='checkmo' && Idev_OneStepCheckout_Model_Observer::showCodMsg($_code)):?><div id ="checkmoMessage" <?php if($this->getSelectedMethodCode()==$_code || ($hide_nonfree_methods && $_code == 'free')): ?> style="display:block;margin-left:10px;" <?php else: echo 'style="display:none;"';endif; ?> >An additional Rs 100 would be charged towards cash handling charges.</div><?php endif;?><?php if($_code=='checkmo'):?><div id="foottip" style="float:right;margin-right:280px;"><a href="#checkMsgNew" onmouseover="showMsg();" onmouseout="hideMsg();">Why is this disabled?</a></div><div id="checkmoNote" class="checkmoNote" style="display:none;">We currently do not offer COD payment option at your specified address .</div><?php endif;?></label>
+        </dt>
+    <?php if($html = $this->getChildHtml('payment.method.'.$_code)): ?>
+        <dd id="container_payment_method_<?php echo $_code; ?>" class="payment-method">
+        <?php echo $html; ?>
+        </dd>
+            <?php endif; ?>
+<?php endforeach; ?>
+    </dl>
+</div>
+<?php $cartGrandTotal = Mage::getSingleton('checkout/cart')->getQuote()->collectTotals()->getGrandTotal(); ?>
+<script type="text/javascript">
+    //<![CDATA[
+    var checkout = new Checkout();
+    $$('#checkout-payment-method-load dt input').invoke('observe', 'click', function(e) {
+        $('onestepcheckout-place-order').hide();
+        var element = e.element();
+        var name = 'payment_form_' + element.getValue();
+        payment.currentMethod = element.getValue();
+        /* Hide all other forms */
+        //$$('dd.payment-method').invoke('hide');
+
+        if(element.checked) {
+            var form = $(name);
+            var container = $('container_payment_method_' + element.getValue());
+
+            if(element !== null && container !== null)    {
+                container.show();
+                $(name).show();
+            }
+        }
+    });
+    var carttotal = <?php echo (int)$cartGrandTotal; ?>;
+    var tabjx = jQuery.noConflict();
+    tabjx('#netBankingOptions').change(function() {
+        if(tabjx('#netBankingOptions').val()!=''){tabjx('#bankOptions').val('citrusNetBanking');}
+        else {tabjx('#bankOptions').val('');}
+        //tabjx('#p_method_citrus_standard').trigger('click');
+    });
+
+    tabjx('#bankOptions').click(function() {
+        tabjx('#netBankingOptions').show();tabjx('#NonMotoCardType').hide();tabjx('#netBankingCards').hide();tabjx('#iframe_body').hide();
+        tabjx('#cardOption1').attr('checked',false);tabjx('#cardOption1').val('');tabjx('#netBankingCards').val('');
+        tabjx('#cardOption2').attr('checked',false);tabjx('#cardOption2').val('');tabjx('#NonMotoCardType').val('');
+        tabjx('#p_method_icici_standard').attr('checked',false);tabjx('#p_method_checkmo').attr('checked',false);tabjx('#checkmoMessage').hide();
+        tabjx('#p_method_avenues_standard').attr('checked',false);tabjx('#payment_form_hdfc_standard').hide();
+        tabjx("#onestepcheckout-place-order").attr('value', 'Proceed to Pay'); 
+    });
+
+    tabjx('#netBankingCards').change(function() {
+        if(tabjx('#netBankingCards').val()!=''){tabjx('#cardOption1').val('netBanking');}
+        else {tabjx('#cardOption1').val('');}
+        tabjx('#cardOption2').val('');tabjx('#NonMotoCardType').val('');tabjx('#p_method_avenues_standard').trigger('click');
+        tabjx('#payment_form_hdfc_standard').hide();
+        var netbank = tabjx('#netBankingCards option:selected').text();
+        _gaq.push(['_trackEvent','payment - method','pay by net banking',netbank,carttotal,true]);
+        tabjx("#onestepcheckout-place-order").attr('value', 'Proceed to Pay'); 
+    });
+
+    tabjx('#NonMotoCardType').change(function() {
+        if(tabjx('#NonMotoCardType').val()!=''){tabjx('#cardOption2').val('nonMoto');}
+        else {tabjx('#cardOption2').val('');}
+        tabjx('#cardOption1').val('');tabjx('#netBankingCards').val('');tabjx('#p_method_avenues_standard').trigger('click');
+        tabjx('#payment_form_hdfc_standard').hide();
+        var debitcard = tabjx('#NonMotoCardType option:selected').text();
+        _gaq.push(['_trackEvent','payment - method','pay by debit card',debitcard,carttotal,true]);
+        tabjx("#onestepcheckout-place-order").attr('value', 'Proceed to Pay'); 
+    });
+
+    tabjx('#cardOption1').click(function() {
+        tabjx('#iframe_bodyHDFC').hide();
+        tabjx('#NonMotoCardType').hide();tabjx('#netBankingCards').show();tabjx('#cardOption2').attr('checked',false);
+        tabjx('#p_method_icici_standard').attr('checked',false);tabjx('#p_method_checkmo').attr('checked',false);
+        tabjx('#bankOptions').attr('checked',false);tabjx('#netBankingOptions').hide();
+        tabjx('#payment_form_hdfc_standard').hide();
+        tabjx('#netBankingCards').val('');
+        tabjx('#iframe_body_dc').hide();
+        tabjx("#onestepcheckout-place-order").attr('value', 'Proceed to Pay'); 
+    });
+
+    tabjx('#cardOption2').click(function() {
+        tabjx('#iframe_bodyHDFC').hide();
+        // tabjx('#iframe_body_dc').hide();
+        tabjx('#netBankingCards').hide();tabjx('#NonMotoCardType').show();tabjx('#cardOption1').attr('checked',false);
+    tabjx('#p_method_icici_standard').attr('checked',false);tabjx('#p_method_checkmo').attr('checked',false);tabjx('#checkmoMessage').hide();
+        tabjx('#bankOptions').attr('checked',false);tabjx('#netBankingOptions').hide();
+        tabjx('#payment_form_hdfc_standard').hide();
+        tabjx('#NonMotoCardType').val('');
+        tabjx("#onestepcheckout-place-order").attr('value', 'Proceed to Pay'); 
+        
+    });
+    tabjx('#p_method_icici_standard').click(function() {
+        tabjx('#iframe_bodyHDFC').hide();
+        tabjx('#iframe_body_dc').hide();
+        tabjx('#netBankingCards').hide();tabjx('#NonMotoCardType').hide();tabjx('#cardOption1').attr('checked',false);
+        tabjx('#cardOption2').attr('checked',false);tabjx('#p_method_checkmo').attr('checked',false);tabjx('#checkmoMessage').hide();
+        tabjx('#p_method_icici_standard').attr('checked',true);
+        tabjx('#bankOptions').attr('checked',false);tabjx('#netBankingOptions').val('');tabjx('#netBankingOptions').hide();
+        tabjx('#payment_form_hdfc_standard').hide();
+        _gaq.push(['_trackEvent','payment - method','pay by icici','icici',carttotal,true]);
+        tabjx("#onestepcheckout-place-order").attr('value', 'Proceed to Pay'); 
+    });
+    tabjx('#p_method_hdfc_standard').click(function() {
+        tabjx('#iframe_body_dc').hide();
+        tabjx('#netBankingCards').hide();tabjx('#NonMotoCardType').hide();tabjx('#cardOption1').attr('checked',false);tabjx('#netBankingCards').val('');
+        tabjx('#cardOption2').attr('checked',false);tabjx('#p_method_checkmo').attr('checked',false);tabjx('#NonMotoCardType').val('');tabjx('#checkmoMessage').hide();
+        tabjx('#p_method_icici_standard').attr('checked',false);
+        tabjx('#p_method_hdfc_standard').attr('checked',true);
+        tabjx('#bankOptions').attr('checked',false);tabjx('#netBankingOptions').val('');tabjx('#netBankingOptions').hide();
+        _gaq.push(['_trackEvent','payment - method','pay by hdfc','hdfc',carttotal,true]);
+
+        tabjx('#billingtooHdfc').attr('checked',false);$('billingh:street1').setValue('');$('billingh:street2').setValue('');
+        $('billingh:city').setValue('');$('billingh:postcode').setValue('');$('billingh:country_id').setValue('');
+        $('billingh:region_id').setValue('');$('billingh:region').setValue('');
+        if (tabjx('#p_method_hdfc_standard').attr('checked')) {
+            tabjx('#iframe_bodyHDFC').slideDown(3500);
+        } 
+        tabjx("#onestepcheckout-place-order").attr('value', 'Proceed to Pay'); 
+    });
+    tabjx('#p_method_checkmo').click(function() {
+        tabjx('#iframe_body_dc').hide();
+        tabjx('#iframe_bodyHDFC').hide();
+        tabjx('#netBankingCards').hide();tabjx('#NonMotoCardType').hide();
+        tabjx('#cardOption1').attr('checked',false);tabjx('#cardOption2').attr('checked',false);
+        tabjx('#p_method_icici_standard').attr('checked',false);
+        tabjx('#p_method_checkmo').attr('checked',true);
+        tabjx('#bankOptions').attr('checked',false);tabjx('#netBankingOptions').val('');tabjx('#netBankingOptions').hide();
+        tabjx('#cardOption1').attr('checked',false);tabjx('#cardOption1').val('');tabjx('#netBankingCards').val('');
+        tabjx('#cardOption2').attr('checked',false);tabjx('#cardOption2').val('');tabjx('#NonMotoCardType').val('');
+        tabjx('#checkmoMessage').show();
+        tabjx('#payment_form_hdfc_standard').hide();
+        _gaq.push(['_trackEvent','payment - method','pay by cash on delivery','cod',carttotal,true]);
+        tabjx('#payment_form_hdfc_standard').hide();     
+        tabjx("#onestepcheckout-place-order").attr('value', 'Place Order');    
+    });
+
+    payment.currentMethod = "<?php echo $this->getQuote()->getPayment()->getMethod() ?>";
+    
+    function postcodeEvent() {
+    var url = '<?php echo $this->getUrl('pincode/ajax/check_postcode', array('_secure'=>true)); ?>';
+    var postcode = <?php echo $this->getQuote()->getShippingAddress()->getPostcode(); ?>; var parameters = { postcode: postcode };
+    new Ajax.Request(url, {
+        parameters: parameters,
+        onComplete: function(response) {
+                if(response.status == 200) {
+                var result = response.responseText.evalJSON().result;
+                if (result == 'codNotExists' || result == 'NotExists' ) {
+                    $('foottip').show();
+                    $('p_method_checkmo').disabled = true;
+                    $('checkmoMessage').hide();
+                 }else {
+                     $('foottip').hide();
+                 }
+            }
+        }
+    });
+    }
+    postcodeEvent();
+    function showMsg() {
+        tabjx('#checkmoNote').show();
+    }
+    function hideMsg() {
+        tabjx('#checkmoNote').hide();
+    }
+    
+    tabjx(document).ready(function() { 
+        if (tabjx('#p_method_checkmo').attr('checked')) { 
+            tabjx("#onestepcheckout-place-order").attr('value', 'Place Order'); 
+        } 
+    });
+    //]]>
+</script>

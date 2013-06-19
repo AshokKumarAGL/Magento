@@ -1,0 +1,130 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+<?php
+/**
+ * Template for displaying product price in different places (products grid, product view page etc)
+ *
+ * @see Mage_Catalog_Block_Product_Abstract
+ */
+?>
+
+<div class="left_container">
+              <div class="top_curve">
+                <h2>Filter Products</h2>
+                <input type="submit" name="" value="" class="go_btn" />
+              </div>
+              <div class="mid_section">
+                <div class="common_section">
+                  <h3>Keyword</h3>
+                  <input type="text" name="" value="Search Here" onblur="if(this.value=='') this.value='Search Here';" onfocus="if(this.value=='Search Here') this.value='';"  class="input_bg" />
+                </div>
+                <div class="common_section">
+                  <h3>Type</h3>
+                  <ul>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>All</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Printed</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Embroided</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Printed with border work</span></li>
+                  </ul>
+                </div>
+                <div class="common_section">
+                  <h3>Price</h3>
+                  <div class="scrollar_box">
+                    <div class="layout-slider" style="width: 100%"> <span style="display: inline-block; width:170px; padding:0;">
+                      <input id="Slider1" type="slider" name="price" value="30000.5;60000" />
+                      </span> </div>
+                    <script type="text/javascript" charset="utf-8">
+				      jQuery("#Slider1").slider({ from: 1000, to: 100000, step: 500, smooth: true, round: 0, dimension: "&nbsp;", skin: "plastic" });
+				    </script> 
+                  </div>
+                  <div class="textbox_area">
+                    <input type="submit" name="" value="" class="btn_arrow" />
+                  </div>
+                </div>
+                <div class="common_section">
+                  <h3>Fabric</h3>
+                  <ul>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>All</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Geogrette</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Chiffon</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Cotton</span></li>
+                  </ul>
+                </div>
+                <div class="common_section">
+                  <h3>Color</h3>
+                  <ul>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Color pallete to choose</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Potentially multiple colors</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>From hover shows the</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Color name</span></li>
+                  </ul>
+                </div>
+                <div class="common_section last">
+                  <h3>Occasion</h3>
+                  <ul>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>All</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Bridal</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Wedding</span></li>
+                    <li><small>
+                      <input type="checkbox" name="" value="" />
+                      </small><span>Party</span></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="bottom_curve">&nbsp;</div>
+            </div>

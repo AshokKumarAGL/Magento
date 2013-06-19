@@ -1,0 +1,207 @@
+	<?php if(!$this->canCheckout() || !$this->validateMinimumAmount()): ?>
+            <?php if($this->settings['checkout_title']): ?>
+                <h1 class="onestepcheckout-title"><?php echo $this->settings['checkout_title']; ?></h1>
+            <?php endif; ?>
+            <?php if($this->canCheckout() && !$this->validateMinimumAmount()): ?>
+                <p><?php echo Mage::getStoreConfig('sales/minimum_order/description'); ?></p>
+                <p><a href="<?php echo $this->getUrl(''); ?>"><?php echo $this->__('Back to homepage'); ?></a></p>
+            <?php else: ?>
+                <p><?php echo $this->__('You need to have products in your cart to checkout, and your cart is empty.'); ?></p>
+                <p><a href="<?php echo $this->getUrl(''); ?>"><?php echo $this->__('Back to homepage'); ?></a></p>
+            <?php endif; ?>
+	<?php else: ?>
+		
+	<div class="login-left-main">
+		<?php echo $this->getChildHtml('ordertabs'); ?>
+        
+        <div class="login-left">
+        	<form id="cart-login-form" method="post">
+			<div class="already-account">
+				<div class="already-account-form">
+					<input type="radio" checked="checked" name="already_member" id="already_member" />I already have an account with Triveni
+				</div>
+				<div class="already-account-name" id="already-account-name">
+					<input type="hidden" name="loginurl" id="loginurl" value="<?php echo $_SERVER['REQUEST_URI'];?>" />
+					<div class="label">Email  *</div>
+					<div class=""><input type="text" id="customer_username" name="customer_username" value="" class="input" /></div>
+					<div class="label">Password *</div>
+					<div class=""><input type="password" name="customer_password" id="customerPWD" value="" class="input" /></div>
+					<span>Forgot Password <a href="#" id="cart-forgot-button">Click Here</a></span>
+				</div>
+			</div>
+			</form>
+			<div class="no-account">
+				<form id="cart-register-form" method="post">
+				<div class="already-account-form">
+					<input type="radio" name="already_member" id="new_member" />I do not have an account with Triveni
+				</div>
+			
+				<div class="already-account-name" style="display:none;" id="new-account-name">
+					<div class="label">Name *</div>
+					<div class=""><input type="text" name="customer_name" id="customer_name" class="input" /></div>
+					<div class="label">Email *</div>
+					<div class=""><input type="text" name="customer_username" id="customer_username" class="input" /></div>
+					<div class="label">Country *</div>
+					<div class=""><?php echo Mage::getBlockSingleton('directory/data')->getCountryHtmlSelect($this->getEstimateCountryId()) ?></div>
+					<div class="label">Phone</div>
+					<div class="">
+						<select name="area_code" id="area_code" class="select">
+							<option>+ 1</option>
+							<option>+ 2</option>
+							<option>+ 91</option>
+							<option>+ 21</option>
+							<option>+ 11</option>
+							</select>
+					<input type="text" name="customer_phone" id="customer_phone" class="inputshort" /></div>
+					<div class="label"><input type="hidden" name="cart_password" id="cart_password" value="123456" /></div>
+					<div class="check"><input name="agree" id="agree" type="checkbox" value="agree" /> Register Me</div>
+				</div>
+				</form>
+			</div>
+			<div class="fb-account">
+				<div class="already-account-form">
+					<input type="radio" name="login_social" id="login_social" />Login with <img src="<?php echo $this->getSkinUrl('images/facebook.gif'); ?>" width="71" height="22" onclick='login();' />
+				</div>
+			</div>
+			<br />
+		</div>
+		
+		
+		<div style="float:left; font:12px arial; padding:5px 0 0 0;">
+			<div id="customer-login-loading" style="display: none; width:25px;" class="loading-ajax">&nbsp;</div>
+			<div id="customer-login-error" class="customer-error" style="display: none;">&nbsp;</div>
+			<div id="customer-forgot-success" style="display: none; color:#1e7fc6;">
+           		<strong><?php echo $this->__('We have now sent a new password to your email address.'); ?></strong>
+       		</div>
+	    </div>
+	    <div style="float:right;">
+			<div class="login">
+				<input type="button" id="loginCustAccount" value="" style="background:url('<?php echo $this->getSkinUrl('images/login.gif');?>') no-repeat; width:104px; height:40px; border:none;" />
+				<input type="button" id="creatUserAtCheckout" value="" style="background:url('<?php echo $this->getSkinUrl('images/login.gif');?>') no-repeat; width:104px; height:40px; border:none; display:none;" />
+			</div>	
+		</div>
+	</div>
+	<div class="login-right">
+       <?php echo $this->getChildHtml('newsummary'); ?>
+	</div>
+<?php endif; ?>
+<script>
+	jQuery.noConflict();
+	$('already_member').observe('click', function(e){
+		var element = e.element();
+        if(element.getValue() == "on"){ 
+        	$('already-account-name').show();$('new-account-name').hide();
+	    	$('new_member').checked = false;$('login_social').checked = false;
+	    	$('loginCustAccount').show();$('creatUserAtCheckout').hide();
+	    	$('customer_name').val('');$('customer_username').val('');$('country_name').val('');
+        }
+	});
+
+	$('new_member').observe('click', function(e){
+		var element = e.element();
+        if(element.getValue() == "on"){ 
+	    	$('new-account-name').show();$('already-account-name').hide();
+	    	$('already_member').checked = false;$('login_social').checked = false;
+	    	$('loginCustAccount').hide();$('creatUserAtCheckout').show();
+	    	$('customer_username').val('');$('customerPWD').val('');
+        }
+	});
+
+	$('login_social').observe('click', function(e){
+		var element = e.element();
+        if(element.getValue() == "on"){ 
+        	$('already_member').checked = false;
+	    	$('new_member').checked = false;
+        }
+	});   
+
+	function callajaxlogin(e){     
+        var loading = $('customer-login-loading');
+        var error = $('customer-login-error');
+        var forgetPwdSuccess = $('customer-forgot-success');
+        var baseUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK); ?>';
+        error.hide();
+        forgetPwdSuccess.hide();
+        loading.show();
+        var form = $('cart-login-form');
+        var url = baseUrl+'onestepcheckout/ajax/newlogin';
+        new Ajax.Request(url, {
+            parameters: form.serialize(true),
+            method: 'POST',
+            onComplete: function(transport) {
+                if(transport.status == 200) {
+                    var result = transport.responseText.evalJSON();
+                    if(!result.success) { forgetPwdSuccess.hide();loading.hide();error.update(result.error);error.show();
+                    } else { window.location=baseUrl+'onestepcheckout/index/detail';}
+                }
+            }
+        });
+    }
+	$('cart-login-form').observe('keyup', function(e) { if(!e) e = window.event; if(e.keyCode == 13) { callajaxlogin(e); } });
+	$('loginCustAccount').observe('click', callajaxlogin);
+
+	
+	var forgot_password_button = $('cart-forgot-button');
+    forgot_password_button.observe('click', function(e) {  
+    var loading = $('customer-login-loading');
+    var error = $('customer-login-error');
+    var success = $('customer-forgot-success');
+    var email = $('customer_username').getValue();
+        if(email != '') {
+            error.hide();
+            loading.show();
+            var baseUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK); ?>';
+            var url = baseUrl+'/onestepcheckout/ajax/forgotPassword';
+            var parameters = {email: email };
+            new Ajax.Request(url, {
+                method: 'post',
+                parameters: parameters,
+                onSuccess: function(transport)  {
+                    var result = transport.responseText.evalJSON();
+                    if(result.success)  {
+                         loading.hide();
+                         success.show();
+                    } else {
+                        error.update('Please enter a registered email address.');
+                        error.show();
+                        loading.hide();
+                    }
+                }
+            });
+        } else {
+            alert('Please enter a valid email address');
+        }
+    });
+	
+	function callNewRegsUser(e) {
+        var baseUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK); ?>';
+        var loading = $('customer-login-loading');
+        var error = $('customer-login-error');
+        var forgetPwdSuccess = $('customer-forgot-success');
+        error.hide();
+        forgetPwdSuccess.hide();
+        loading.show();
+            var form = $('cart-register-form');
+            var url = baseUrl+'customer/account/createnewuser';
+            new Ajax.Request(url, {
+                parameters: form.serialize(true),
+                method: 'POST',
+                onComplete: function(transport) { 
+                        if(transport.status == 200) {
+                        var result = transport.responseText.evalJSON();
+                        if(!result.success) {
+                            forgetPwdSuccess.hide();
+                            loading.hide();
+                            error.update(result.error);
+                            error.show();
+                        } else {
+                           window.location=baseUrl+'onestepcheckout/index/detail';
+                        }
+                    }
+                }
+            });
+        }
+	$('cart-register-form').observe('keyup', function(e) { if(!e) e = window.event; if(e.keyCode == 13) { callNewRegsUser(e); } });
+	$('creatUserAtCheckout').observe('click', callNewRegsUser);
+	
+</script>

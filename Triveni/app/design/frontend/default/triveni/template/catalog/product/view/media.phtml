@@ -1,0 +1,106 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product media data template
+ *
+ * @see Mage_Catalog_Block_Product_View_Media
+ */
+?>
+<?php
+    $_product = $this->getProduct();
+    $_helper = $this->helper('catalog/output');
+    
+?>
+<?php if ($_product->getImage() != 'no_selection' && $_product->getImage()): ?>
+		<div class="clearfix">
+			<a id="clickimage" class="jqzoom" href="<?php echo $this->helper('catalog/image')->init($_product, 'image') ?>"  title="<?php echo $this->htmlEscape($this->getImageLabel()) ?>" >
+		    <?php
+		        $_img = '<img class="jqzoom" rel="gal1" id="image" src="'.$this->helper('catalog/image')->init($_product, 'image')->resize(459,645).'" alt="'.$this->htmlEscape($this->getImageLabel()).'" title="'.$this->htmlEscape($this->getImageLabel()).'" />';
+		        echo $_helper->productAttribute($_product, $_img, 'image');
+		    ?>
+	       </a>
+       </div>
+		<div class="bottom_row gallery">
+		<?php if (count($this->getGalleryImages()) > 1): ?>
+	        <div class="list_carousel2 blackStrip">
+	        	<ul id="mediaSlider">
+	        		<?php $p=1; foreach ($this->getGalleryImages() as $_image): ?>
+	                  <li><a class="imageClick" href="javascript:void(0)" rel="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->resize(459,645); ?>"  abs="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile()); ?>">
+							<img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $_image->getFile())->resize(52); ?>" width="52" height="52" alt="" />
+						  </a>
+					   </li>
+	                <?php endforeach; ?>
+	            </ul>
+	            <div class="clearfix"></div>
+	            <a id="prev3" class="prev" href="#">&lt;</a> 
+  				<a id="next3" class="next" href="#">&gt;</a> 
+	        </div>
+	     <?php endif; ?>
+        	<div class="social_icons">
+        		<div class="share-buttons share-buttons-panel" data-style="medium" data-counter="true" data-oauth="true" data-hover="true" data-promo-callout="left" data-buttons="twitter,facebook,google,email,pinterest,stumbleupon,kaboodle,tumblr,polyvore"></div>
+        	</div>
+        		<?php if (count($this->getGalleryImages()) > 1): ?>
+				     <a href="javascript:void(0);" class="plus">&nbsp;</a>
+                     <a href="javascript:void(0);" class="minus">&nbsp;</a>
+            	<?php endif; ?>
+         </div>	
+		 <script type="text/javascript">
+			//<![CDATA[
+			    Event.observe(window, 'load', function() {
+			        product_zoom = new Product.Zoom('image', 'track', 'handle', 'zoom_in', 'zoom_out', 'track_hint');
+			    });
+			//]]>
+		 </script>
+<?php else: ?>
+		<a id="mainashok2" href="<?php echo $this->helper('catalog/image')->init($_product, 'image')->resize(459,645) ?>" class="jqzoom" rel='gal1'  title="Fancy Printed Faux Geogette Saree" >
+			<?php
+		        $_img = '<img id="image" class="jqzoom" rel="gal1" src="'.$this->helper('catalog/image')->init($_product, 'image')->resize(459,645).'" alt="'.$this->htmlEscape($this->getImageLabel()).'" title="'.$this->htmlEscape($this->getImageLabel()).'" />';
+		        echo $_helper->productAttribute($_product, $_img, 'image');
+			?>
+		  </a>  
+			<div class="bottom_row gallery">
+            <?php if (count($this->getGalleryImages()) > 1): ?>
+		        <div class="blackStrip">
+		        	<ul>
+		        		<?php $p=1; foreach ($this->getGalleryImages() as $_image): ?>
+		                  <li><a class="imageClick" href="javascript:void(0)" rel="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile())->resize(459,645); ?>" abs="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'image', $_image->getFile()); ?>">
+								<img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $_image->getFile())->resize(52); ?>" width="52" height="52" alt="" />
+							  </a>
+						  </li>
+		                <?php endforeach; ?>
+		            </ul>
+		        </div>
+		     <?php endif; ?>
+	        	<div class="social_icons">
+        			<div class="share-buttons share-buttons-panel" data-style="medium" data-counter="true" data-oauth="true" data-hover="true" data-promo-callout="left" data-buttons="twitter,facebook,google,email,pinterest,stumbleupon,kaboodle,tumblr,polyvore"></div>
+        		</div>
+	            <?php if (count($this->getGalleryImages()) > 1): ?>
+				        <a href="javascript:void(0);" class="plus">&nbsp;</a>
+                        <a href="javascript:void(0);" class="minus">&nbsp;</a>
+            	<?php endif; ?>
+	         </div>
+<?php endif;?>

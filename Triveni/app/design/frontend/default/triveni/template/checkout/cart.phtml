@@ -1,0 +1,224 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Shopping cart template
+ *
+ * @see Mage_Checkout_Block_Cart
+ */
+?>
+<div class="main_section">
+          <fieldset>
+            <div class="left_section">
+            	<h1><?php echo $this->__('Products in My Cart') ?></h1>
+            	
+	            	<?php if(!$this->hasError()): ?>
+				        <ul class="checkout-types">
+					        <?php foreach ($this->getMethods('top_methods') as $method): ?>
+					            <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+					            	<li><?php //echo $methodHtml; ?></li>
+					            <?php endif; ?>
+					        <?php endforeach; ?>
+				        </ul>
+				   <?php endif; ?>
+			   	   <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+    			   <?php echo $this->getChildHtml('form_before') ?>
+    			   <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
+		            <div class="cart-box" id="shopping-cart-table">
+						<div class="product-head">
+							<ul>
+								<li class="column1"><?php echo $this->__('Products') ?></li>
+								<li class="column2"><?php echo $this->__('Code') ?></li>
+								<li class="column3"><?php echo $this->__('QTY') ?></li>
+								<li class="column4"><?php echo $this->__('Rate (USD)') ?></li>
+							</ul>
+						</div>
+						
+						<?php foreach($this->getItems() as $_item): ?>
+                    		<?php echo $this->getItemHtml($_item) ?>
+                		<?php endforeach ?>
+						
+						<div class="product-price">
+							<ul>
+								<li class="column1"><span><?php echo $this->__('Total Products') ?></span></li>
+								<li class="column2">
+									<?php
+										$cart = Mage::getModel('checkout/session')->getQuote();
+										echo Mage::helper('core')->currency($cart->getGrandTotal(),true,false);
+									?>
+								</li>
+							</ul>
+						</div>
+					</div>
+					
+					<div class="cart-continue">
+						<ul>
+							<li class="left">
+								<span>
+									<?php if($this->getContinueShoppingUrl()): ?>
+                                		<button type="button" style="background:url('<?php echo $this->getSkinUrl('images/continue-shipping.jpg');?>') no-repeat; width:120px; height:27px;" title="<?php echo $this->__('Continue Shopping') ?>" class="button btn-continue" onclick="setLocation('<?php echo $this->getContinueShoppingUrl() ?>')"></button>
+                            		<?php endif; ?>
+								</span>
+							</li>
+							<li class="right">
+								<span>
+									<button type="submit" style="background:url('<?php echo $this->getSkinUrl('images/update-cart.jpg');?>') no-repeat; width:120px; height:27px;" name="update_cart_action" value="update_qty" title="<?php echo $this->__('Update Shopping Cart'); ?>" class="button btn-update"></button>
+                            		<button type="submit" style="background:url('<?php echo $this->getSkinUrl('images/clear-shopping.gif');?>') no-repeat; width:140px; height:27px;" name="update_cart_action" value="empty_cart" title="<?php echo $this->__('Clear Shopping Cart'); ?>" class="button btn-empty" id="empty_cart_button"></button>
+                            	</span>
+							</li>
+						</ul>
+					</div>
+				<script type="text/javascript">decorateTable('shopping-cart-table')</script>
+		</form>
+		<div class="shiiping-box">
+			<div class="estimate-box">
+				<?php if (!$this->getIsVirtual()): echo $this->getChildHtml('shipping'); endif; ?>
+				
+			</div>
+			<div class="discount-box">
+				<?php echo $this->getChildHtml('coupon') ?>
+			</div>
+			<div class="total-box">
+				<?php echo $this->getChildHtml('totals'); ?>
+				<?php 
+					$quote = Mage::getSingleton('checkout/session')->getQuote();
+					foreach ($quote->getAllItems() as $item){
+				    	$total = $total + $item->getDiscountAmount();
+				    }
+				    if($total > 0):
+				?>
+					<div class="discount">Discount Code applied $ <?php echo $total; ?> off</div>
+				<?php else: ?>
+					<div class="discount">&nbsp;</div>
+				<?php endif; ?>
+				<?php if(!$this->hasError()): ?>
+			            <?php foreach ($this->getMethods('methods') as $method): ?>
+			                <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
+			                	<div class="checkout"><?php echo $methodHtml; ?></div>
+			                <?php endif; ?>
+			            <?php endforeach; ?>
+	            <?php endif; ?>
+			</div>
+		</div>
+		<div class="shiiping-box">
+			<div class="ship-to">
+				<div class="ship-to-data">
+					<ul>
+						<li class="to"><?php echo $this->__('Ship To') ?></li>
+						<li>
+				              <select name="country_id" id="country_id6">
+				                <option value="Arvind Saraf, 1101 AAshirwad Palace">Arvind Saraf, 1101 AAshirwad Palace</option>
+				                <option value="Arvind Saraf, 1101 AAshirwad Palace">Arvind Saraf, 1101 AAshirwad Palace</option>
+				                <option value="Arvind Saraf, 1101 AAshirwad Palace">Arvind Saraf, 1101 AAshirwad Palace</option>
+				              </select>
+					       
+						</li>
+						<li class="to"><?php echo $this->__('Via') ?></li>
+						<li>
+				              <select name="country_id" id="country_id7">
+				                <option value="Blue Dart">Blue Dart</option>
+				                <option value="DHL">DHL</option>
+				              </select>
+						    
+						</li>
+						<li class="to"><?php echo $this->__('Ship To') ?></li>
+						<li>
+				              <select name="country_id" id="country_id8">
+				                <option value="Arvind Saraf, 1101 AAshirwad Palace">Arvind Saraf, 1101 AAshirwad Palace</option>
+				                <option value="Arvind Saraf, 1101 AAshirwad Palace">Arvind Saraf, 1101 AAshirwad Palace</option>
+				                <option value="Arvind Saraf, 1101 AAshirwad Palace">Arvind Saraf, 1101 AAshirwad Palace</option>
+				              </select>
+					        
+					    </li>
+						<li class="to"><?php echo $this->__('Via') ?></li>
+						<li>
+				              <select name="country_id" id="country_id9">
+				                <option value="Blue Dart">Blue Dart</option>
+				                <option value="DHL">DHL</option>
+				              </select>
+						    
+						 </li>
+					</ul>
+				</div>
+				<div class="ship-cost">
+					<ul>
+						<li><?php echo $this->__('Cost') ?></li>
+						<li>$ 95</li>
+					</ul>
+					<div class="fastcheckout"><a href="#"></a></div>
+				</div>
+			</div>
+		</div>
+     </div>
+     <div class="right_section">
+     	<h3><?php echo $this->__('Recommended Products') ?></h3>
+		<?php 
+		$array_added_product = array();
+		$total_product= "";
+		$last_product= "";                 
+		foreach($this->getItems() as $_item){
+			$array_added_product[]=$_item->getProductId();
+		} 
+		$total_product=sizeof($array_added_product);
+		if($total_product > 0){
+			$last_product=$array_added_product[($total_product-1)];
+		}
+		$_product = Mage::getModel('catalog/product')->load($last_product);			
+		if (!$_product->hasRelatedProductIds()) {
+			$ids = array();
+			foreach ($_product->getRelatedProducts() as $product) {
+				$ids[] = $product->getId();
+			}
+			$_product->setRelatedProductIds($ids);
+		}
+		if ($_product->hasRelatedProductIds()) {
+		?> 
+		<div class="scrollar_area">
+			<ul id="scroller1">
+			<?php
+			$product_counter=0;
+			foreach ($_product->getData('related_product_ids') as $r_productid) {
+			$_product = Mage::getModel('catalog/product')->load($r_productid);
+			?>
+			<li>
+				<h4><a href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->htmlEscape(substr($_product->getName(),0,32)) ?>...</a></h4>
+				<div class="image_area"><a href="<?php echo $_item->getProductUrl() ?>" title="<?php echo $this->htmlEscape($_product->getName()) ?>" class="product-image"><img src="<?php echo $this->helper('catalog/image')->init($_product, 'thumbnail')->resize(206) ?>" width="206" height="145" alt="<?php echo $this->htmlEscape($_product->getName()) ?>" /></a></div>
+				<div class="button_row">
+				  <input type="button" name="" value="" class="btn_buynow" />
+				  <a href="<?php echo $this->getAddToWishlistUrl($_product) ?>" class="link-wishlist"><input type="button" name="" value="" class="btn_shortlist" /></a>
+				</div>
+			</li>	
+			<?php } ?>	
+			</ul>
+		</div>
+		<?php }else{ echo "<p>No Recommended Product Found</p>";}  ?>		
+     </div>
+  </fieldset>
+</div>
+      
+
+

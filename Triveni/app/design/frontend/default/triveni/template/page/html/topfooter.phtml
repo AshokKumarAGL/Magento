@@ -1,0 +1,96 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+	<div class="bottom_section">
+        <div class="common_box first">
+          <h3><?php echo $this->__('Our Policies') ?></h3>
+          <ul>
+            <li><a href="<?php echo $this->getUrl(''); ?>terms-of-use"><?php echo $this->__('Terms of Sale') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>shipping-policy"><?php echo $this->__('Shipping & Logistics') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>return-exchange-policy"><?php echo $this->__('Return Policy') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>privacy-policy"><?php echo $this->__('Privacy Policy') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>disclaimer"><?php echo $this->__('Disclaimer') ?></a></li>
+          </ul>
+        </div>
+        <div class="common_box first">
+          <h3><?php echo $this->__('Company') ?></h3>
+          <ul>
+            <li><a href="<?php echo $this->getUrl(''); ?>about-us"><?php echo $this->__('About Us ') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>management"><?php echo $this->__('Team') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>our-ethos"><?php echo $this->__('Our Ethos') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>working-with-triveri"><?php echo $this->__('Working with Triveni') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>contacts"><?php echo $this->__('Contact Us') ?></a></li>
+          </ul>
+        </div>
+        <div class="common_box">
+          <h3><?php echo $this->__('Articles') ?></h3>
+          <ul>
+            <li><a href="<?php echo $this->getUrl(''); ?>timelessmess-of-sarees"><?php echo $this->__('Timelessness of Saree') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>saree-draping-styles"><?php echo $this->__('Saree Draping styles') ?></a></li>
+          </ul>
+          <h3><?php echo $this->__('What\'s New') ?></h3>
+          <ul>
+            <li id="btnNews"><a href="#"><?php echo $this->__('Newsletters') ?></a>
+            	<ul>
+                	<li><a href="#"><?php echo $this->__('LFW Summer 2013') ?></a>
+                    	<ul>
+                        	<li><a href="<?php echo $this->getUrl(''); ?>pastels-neons-what-cha-like"><?php echo $this->__('Pastels & Neons – What\'cha like?') ?></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="http://trivenisarees.blogspot.in/"><?php echo $this->__('Blog') ?></a></li>
+          </ul>
+        </div>
+        <div class="common_box last">
+          <h3>Engage with Us</h3>
+          <ul>
+            <li><a href="<?php echo $this->getUrl(''); ?>vender-program"><?php echo $this->__('Vendor Program') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>designer-marketplace"><?php echo $this->__('Designer Marketplace') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>wholesale-buyer-program"><?php echo $this->__('Wholesale Buyer Program') ?></a>
+            	<ul>
+                	<li><a href="<?php echo $this->getUrl(''); ?>signup-for-wholesaler-buyer"><?php echo $this->__('Wholesale Buyer Signup') ?></a></li>
+                </ul>
+            </li>
+            <li><a href="<?php echo $this->getUrl(''); ?>ambassador-program"><?php echo $this->__('Ambassador Program') ?></a>
+            	<ul>
+                	<li><a href="<?php echo $this->getUrl(''); ?>triveni-ambassadors"><?php echo $this->__('Triveni Ambassadors') ?></a></li>
+                </ul>
+            </li>
+            <li><a href="<?php echo $this->getUrl(''); ?>writers-ahoy"><?php echo $this->__('Writers Ahoy') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>feedback-form"><?php echo $this->__('Leave a Feedback') ?></a></li>
+            <li><a href="<?php echo $this->getUrl(''); ?>testimonial"><?php echo $this->__('Customer Testimonials') ?></a></li>
+          </ul>
+        </div>
+        <div class="right_box">
+          <div id="slider">
+           	<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('triveni_testimonial')->toHtml() ?> 
+          </div>
+		  <a href="<?php echo $this->getUrl(''); ?>testimonial" style="text-decoration:none;">
+          <strong><?php echo $this->__('What our Patrons say') ?></strong></a> 
+        </div>
+      </div>

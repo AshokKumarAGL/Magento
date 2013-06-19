@@ -1,0 +1,180 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class="main_section">
+    <div class="about_section">
+      <h1><?php echo Mage::helper('contacts')->__('Contact Us') ?></h1>
+        <div class="history">
+           <div class="section">
+				<strong class="head">Head Office</strong><br />
+				<strong>Triveni Sarees</strong><br />
+						210-211 Lower Ground Floor, Anupam Textile Market,<br />
+						Ring Road, Surat - 395002 Gujarat, India<br />
+						Phone: +91 261 2337832<br />
+						Email: <a href="mailto:info@trivenisarees.com">info@trivenisarees.com</a><br />
+			</div>
+			<div class="section">
+				<div class="leftside">
+					<strong>For Product equiries & order status:</strong><br />
+							Email : <a href="mailto:support@trivenisarees.com">support@trivenisarees.com</a><br />
+							Phone :  +91 261 2337832, +91 97125 18932
+				</div>
+				<div class="leftside">
+					<strong>For any enquiries about the Vendor Program & Designer signups: </strong><br />
+							Email : <a href="mailto:partner_enquiries@trivenisarees.com">partner_enquiries@trivenisarees.com</a><br />
+							Phone : +91 261 2337832, Extension 202 
+				</div>
+			</div>
+			<div class="section">
+				<div class="leftside">
+					<strong>For other Partnership equiries:</strong><br />
+							Email : <a href="mailto:support@trivenisarees.com">support@trivenisarees.com</a><br />
+							Phone :  +91 261 2337832, +91 97125 18932
+				</div>
+				<div class="leftside">
+					For Jobs, please email your application & resumes to<br />
+					<a href="mailto:jobs@trivenisarees.com">jobs@trivenisarees.com</a>
+				</div>
+			</div>
+			<div class="section">
+				<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
+				<div class="form">
+					<strong class="head">Submit your Query Here</strong><br />
+				
+					<div class="row">
+						<div class="label"><?php echo Mage::helper('contacts')->__('Name') ?><em>*</em></div>
+						<div class="">
+							<input name="name" id="name" title="<?php echo Mage::helper('contacts')->__('Name') ?>" value="<?php echo $this->htmlEscape($this->helper('contacts')->getUserName()) ?>" class="inputlong input-text required-entry" type="text" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="label"><?php echo Mage::helper('contacts')->__('Email') ?><em>*</em></div>
+						<div class="">
+							<input name="email" id="email" title="<?php echo Mage::helper('contacts')->__('Email') ?>" value="<?php echo $this->htmlEscape($this->helper('contacts')->getUserEmail()) ?>" class="inputlong input-text required-entry validate-email" type="text" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="label"><?php echo Mage::helper('contacts')->__('Phone') ?><em>*</em></div>
+						<div class="">
+							<input name="telephone" id="telephone" title="<?php echo Mage::helper('contacts')->__('Telephone') ?>" value="" class="inputlong input-text required-entry validate-mobileno" type="text" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="label"><?php echo Mage::helper('contacts')->__('Type') ?><em>*</em></div>
+						<div class="">
+							<select name="area code" class="selectlong required-entry validate-select">
+								<option value="Product Suggestion">Product Suggestion</option>
+								<option value="Order Status">Order Status</option>
+								<option value="Order Status">Order Status</option>
+								<option value="Designer Signup">Designer Signup</option>
+								<option value="Order">Order</option>
+								<option value="Designer Signup">Designer Signup</option>
+								<option value="Other kind of Partnership">Other kind of Partnership</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="label"><?php echo Mage::helper('contacts')->__('Query') ?><em>*</em></div>
+						<div class="">
+							<input name="comment" id="comment" title="<?php echo Mage::helper('contacts')->__('Comment') ?>" class="inputlong required-entry input-text" value="" type="text" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="label">&nbsp;</div>
+						<div class="">
+							<input type="text" name="hideit" id="hideit" value="" style="display:none !important;" />
+							<button type="submit" title="<?php echo Mage::helper('contacts')->__('Submit') ?>" class="button">
+								<span><span><?php echo Mage::helper('contacts')->__('Submit') ?></span></span>
+							</button>
+							<input type="image" src="<?php echo $this->getSkinUrl('images/contact-submit.jpg'); ?>" name="test"  />
+						</div>
+					</div>
+				</div>
+				</form>
+				<script type="text/javascript">
+				//<![CDATA[
+				    var contactForm = new VarienForm('contactForm', true);
+				//]]>
+				</script>
+			</div>
+          </div>
+       </div>
+    </div>
+
+
+
+
+<?php /* ?>
+
+<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+<div class="page-title">
+    <h1><?php echo Mage::helper('contacts')->__('Contact Us') ?></h1>
+</div>
+<form action="<?php echo $this->getFormAction(); ?>" id="contactForm" method="post">
+    <div class="fieldset">
+        <h2 class="legend"><?php echo Mage::helper('contacts')->__('Contact Information') ?></h2>
+        <ul class="form-list">
+            <li class="fields">
+                <div class="field">
+                    <label for="name" class="required"><em>*</em><?php echo Mage::helper('contacts')->__('Name') ?></label>
+                    <div class="input-box">
+                        <input name="name" id="name" title="<?php echo Mage::helper('contacts')->__('Name') ?>" value="<?php echo $this->htmlEscape($this->helper('contacts')->getUserName()) ?>" class="input-text required-entry" type="text" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="email" class="required"><em>*</em><?php echo Mage::helper('contacts')->__('Email') ?></label>
+                    <div class="input-box">
+                        <input name="email" id="email" title="<?php echo Mage::helper('contacts')->__('Email') ?>" value="<?php echo $this->htmlEscape($this->helper('contacts')->getUserEmail()) ?>" class="input-text required-entry validate-email" type="text" />
+                    </div>
+                </div>
+            </li>
+            <li>
+                <label for="telephone"><?php echo Mage::helper('contacts')->__('Telephone') ?></label>
+                <div class="input-box">
+                    <input name="telephone" id="telephone" title="<?php echo Mage::helper('contacts')->__('Telephone') ?>" value="" class="input-text" type="text" />
+                </div>
+            </li>
+            <li class="wide">
+                <label for="comment" class="required"><em>*</em><?php echo Mage::helper('contacts')->__('Comment') ?></label>
+                <div class="input-box">
+                    <textarea name="comment" id="comment" title="<?php echo Mage::helper('contacts')->__('Comment') ?>" class="required-entry input-text" cols="5" rows="3"></textarea>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="buttons-set">
+        <p class="required"><?php echo Mage::helper('contacts')->__('* Required Fields') ?></p>
+        <input type="text" name="hideit" id="hideit" value="" style="display:none !important;" />
+        <button type="submit" title="<?php echo Mage::helper('contacts')->__('Submit') ?>" class="button"><span><span><?php echo Mage::helper('contacts')->__('Submit') ?></span></span></button>
+    </div>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+    var contactForm = new VarienForm('contactForm', true);
+//]]>
+</script>
+<?php */ ?>

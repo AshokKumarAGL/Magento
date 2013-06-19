@@ -1,0 +1,120 @@
+Hope things are well. Here below are a few broad things that I wanted to discuss with you from Triveni's context:
+
+    Promotion of website to an audience beyond our email subscribers & social network followers.
+    Our website development workflow so that it merges in better with some current development work we are doing at Triveni.
+
+I elaborate on each of these in more detail below.
+Promotion of website beyond our email subscribers
+
+Over the last 4 months, we have managed to figure out, after a series of experimental iterations, what Triveni's communication as a brand must be. This shows up in our more mature & consistent communication on our facebook page & email list. We are finally satisfied with our content, and we want to take it beyond our regular subscribers.
+
+We have even experimented with unsubscribed users – even bought email lists and sent out sendblaster spams, not with much success – most emails were rejected the receiving SMTP gateways. We want to figure out the right mode of getting our emails out to a wider targeted segment, say through either marketing mail services or other email lists. Any suggestions?
+Website Development workflow
+
+Another major effort at Triveni over the last 4 months has been systems level integration of all our functions – so that our energy goes into the real development, exploration and expansion than managing operations. The move to Magento was partly mandated by this integration goal, as much also by fixing the site's consumer side functionality.
+
+As we build the current website, we want to bring in all the functionality that we need now and over the next 1 year+, so that we can focus our energies thereafter on actual business expansion & doing more cool things on our site (meta search, solid very personalized recommendations, social recommendations are in the thought process right now).
+
+This means that there more major feature sets than those in the specs that we shared. We had a chance to shortlist & partially evaluate existing Magento modules / stack against these feature sets:
+
+    eBay & Amazon listings & sales integration. We are currently using m2e pro module for this - it works so well for us, we have even setup a magento installation just to run it ( www.trivenifashions.com/m ). We have been managing our listings & inventory with it – and want to even mange our eBay & Amazon orders on it. This requires PDF invoice templates and fake invoice (for international customs) etc – that will be practically same as that on our website. Promising invoice printing modules are:
+
+        Custom PDF invoice layout
+
+        Easy PDF invoice
+
+        FOOMAN PDF Customiser
+
+    Accounting integration: We'll like to be able to import our invoices directly into our accounting system, but this integration is only available with Quickbooks. We'll have to do some custom development here, or move to Quickbooks.
+
+    Inventory (multi-warehouse, picklists, barcoding) & Backorder management. Some promising modules here are (there are many more!):
+
+        Magento Bee – supply & order management
+
+        Shipworks. This is a desktop version – which breaksdown in face of multi-currency etc. Very few order management systems get multi-currency right.
+
+        Pickpack – for picking list management.
+
+    Vendor management. We have started a vendor program, currently with a purchase & sell model, but soon – we'll be providing drop shipment option. Magento does seem to have modules for those. Promising ones among these include:
+
+        Unirgy udropship
+
+        Ultimate Vendor Dropshipment
+
+        SmartOSC
+
+        innoexts Multi-warehouse
+
+    Shipping system integration – including shipment bill generation & tracking. Module includes:
+
+        ShipSync – Simple FedEx WebServices integration.
+
+        [Many more for other shippers]
+
+    Shipping rates & restrictions:
+
+        Amasty Shipping Rules, Amasty Shipping Restrictions
+
+    Customer relationship management, so that all customer information across all medium (live chat, phone calls, emails, order placed note etc): SugarCRM Bridge seems like the best module option, along with SugarCRM setup ofcourse. SugarCRM seems to have livechat, phone log & email support as well.
+
+    Recommendation engine, based on co-visitation (“People who saw this product also saw”), feature sets and the visitor demographics. Promising amongst these are:
+
+        Yoochoose
+
+        LiftSuggest
+
+    Social Media & Promotional activity integration for ROI purposes – including integration with Google Analytics, Facebook, other social media. More apart from the below should be available, but haven't been evaluated.
+
+        Windsor Circle Mailchimp integration, since Mailchimp is our preferred mailing system
+
+        Mailjet for mass & transactional mailing
+
+    Stores on Social Media: Export our website collection on facebook (and if possible on other social media) as stores. Options for facebook are StoreYa & a few more.
+
+    Rewards programs, modules:
+
+        Mageward Reward points pro
+
+        SweetTooth Loyalty
+
+    Mobile version:
+
+        Shopgate – M-commerce solutions for your online shop
+
+    Affiliate, mentioned in the specs originally shared. This seems to be a stronger need, now that we have been looking at getting more traffic through affiliates and partnersing with affiliates. Promising modules for this are:
+
+        Affiliate Pro
+
+        Affiliate Plus
+
+    Wholesellers – different price for different customers
+
+    Integration with other sites, or atleast feed export that can work with other sites like thefind.com, shopzilla.com
+
+        GoMage Feed Pro.
+
+    Social bookmarking & social login (eg login using facebook id):
+
+        Magentix for social bookmarking
+
+        apptha for social login
+
+    UI based bulk data entry in Magento – like excess spreadsheet like entry / edit of data
+
+    Managing scaleup, whenever it happens (hopefully soon!) - Flexible scale – Pagoda or even the regular Amazon EC2
+
+The above is a long list – and while we do not see ourselves deploying all the above functionality right at the start, it'll definitely help to think through the above & identify the right Magento stack. Obviously, many of the modules are paid – and weren't in the original feature set we shared for your proposal, so any of these new module purchase costs & overhead will be borne by Triveni.
+
+The idea / suggestion from my side is as follows:
+
+    While the creative development is on, can we initiate the activity the above features & modules. The above list, combined with the original spec, can be used as a starting point?
+
+    I suggest initiating the Magento backend admin panel setup even while the creative development is in the works. As I understand, the creative templates are fairly independent of the backend admin funcitonality, esp the above. This will be a great help to us - we are currently running a Magento installation ( www.trivenifashions.com/m ) to manage our eBay & Amazon listings & inventory, and are looking to setup our invoice formats etc. This overlap can be handled by sharing the backend in the same shared installation.
+
+    The advantage is that we'll have the backend full functionality set tried & tested (even if only for eBay, Amazon & manually entered / uploaded website orders) before we go live – saving some last minute debugging.
+
+I understand that this is a significant departure from your regular development cycle – both in terms of level of involvement of the client (I'm very involved in the tech level issues at Triveni, and will continue to be with our Adglobal360 development work) & the regular flow. What I do assure of, however, is a pretty solid brand & system in the process.
+
+I hope this works for you – let me know. I wanted to check with you before I even float the idea with your team. I plan to be in NCR next week (sometime between Wednesday to Friday, Feb 13 – 15), and it'll be very helpful to spend time with your tech team (on the above, as also the eBay store), with your creative team (to close on any design issues), and communications team (on email marketing).
+
+Look forward to talking to you tomorrow.

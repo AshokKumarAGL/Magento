@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <frontend>  
+      <routers>  
+        <customer>  
+          <args>  
+            <modules> 
+              <Triveni_Customer before="Mage_Customer">Triveni_Customer</Triveni_Customer>
+            </modules> 
+            <frontName>customer</frontName>
+          </args>  
+        </customer>  
+      </routers>  
+    </frontend>  
+</config>

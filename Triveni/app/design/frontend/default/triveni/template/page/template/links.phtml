@@ -1,0 +1,85 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @see Mage_Page_Block_Template_Links
+ */
+?>
+
+	<script>
+	function loadpage(data){
+		window.location.href= data;
+	}
+	</script>
+	<?php $session = Mage::getSingleton('customer/session'); ?>
+	<?php if($session->isLoggedIn()) { ?>
+		<select name="country_id2" id="country_id2" onchange="return loadpage(this.value);">
+	         <option value="<?php echo $this->getUrl(''); ?>customer/account">My Account</option>
+	         <option value="<?php echo $this->getUrl(''); ?>customer/account/logout">Logout</option>
+	         <option value="<?php echo $this->getUrl(''); ?>wishlist">My Future List</option>
+	    </select>
+    <?php }else{ ?>
+    	<div class="sbHolder" style="margin-left:15px;"><a href="<?php echo $this->getUrl(''); ?>customer/account/logout" style="color:#f38c41; padding:5px 0 0 25px; display:block;">Login</a></div>
+	<?php } ?>
+
+<?php /*  this is dynamic code add by ashok ?>
+<?php $_links = $this->getLinks(); ?>
+<?php if(count($_links)>0): ?>
+	<select name="country_id2" id="country_id2">
+	<?php foreach($_links as $_link): ?>
+	  	<?php if ($_link instanceof Mage_Core_Block_Abstract):?>
+            <option value="USD"><?php echo $_link->toHtml() ?></option>
+        <?php else: ?>
+	  		<option value="<?php echo $_link->getUrl() ?>"><?php echo $_link->getBeforeText() ?><?php echo $_link->getLabel() ?><?php echo $_link->getAfterText() ?></option>
+	  	<?php endif;?>	
+	  <?php endforeach; ?>
+	</select>
+<?php endif; ?>
+<?php */ ?>
+
+
+
+
+
+<?php /* ?>
+<?php $_links = $this->getLinks(); ?>
+<?php if(count($_links)>0): ?>
+<ul class="links"<?php if($this->getName()): ?> id="<?php echo $this->getName() ?>"<?php endif;?>>
+    <?php foreach($_links as $_link): ?>
+        <?php if ($_link instanceof Mage_Core_Block_Abstract):?>
+            <?php echo $_link->toHtml() ?>
+        <?php else: ?>
+            <li<?php if($_link->getIsFirst()||$_link->getIsLast()): ?> class="<?php if($_link->getIsFirst()): ?>first<?php endif; ?><?php if($_link->getIsLast()): ?> last<?php endif; ?>"<?php endif; ?> <?php echo $_link->getLiParams() ?>>
+            	<?php echo $_link->getBeforeText() ?>
+            <a href="<?php echo $_link->getUrl() ?>" title="<?php echo $_link->getTitle() ?>" <?php echo $_link->getAParams() ?>>
+            	<?php echo $_link->getLabel() ?>
+            </a><?php echo $_link->getAfterText() ?></li>
+        <?php endif;?>
+    <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<?php */ ?>

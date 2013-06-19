@@ -1,0 +1,53 @@
+
+
+	<div 
+		<?php if(Mage::app()->getRequest()->getActionName() == 'login'){ ?> 
+			class="step1" 
+		<?php }else if(Mage::app()->getRequest()->getActionName() == 'detail'){ ?>
+			class="step2" 
+		<?php }else if(Mage::app()->getRequest()->getActionName() == 'payments'){ ?>
+			class="step3"
+		<?php } ?>></div>
+
+
+
+<?php /* ?>
+<ul>
+   <li class="one"><a href="<?php echo $this->getUrl('onestepcheckout/index/login') ?>" class="<?php echo ((Mage::app()->getRequest()->getActionName() == 'login') ? 'active' : '' ); ?>"><span><strong>1</strong>Email or Login</span></a></li>
+   <li class="two"><a href="<?php echo $this->getUrl('onestepcheckout/index/detail') ?>" class="<?php echo ((Mage::app()->getRequest()->getActionName() == 'detail') ? 'active' : '' ); ?>"><span><strong>2</strong>Delivery Details</span></a></li>
+   <li class="three"><a href="<?php echo $this->getUrl('onestepcheckout/index/address') ?>" class="<?php echo ((Mage::app()->getRequest()->getActionName() == 'address') ? 'active' : '' ); ?>"><span><strong>3</strong>Billing/Shipping Add.</span></a></li>
+   <li class="four"><a href="#" class="<?php echo ((Mage::app()->getRequest()->getActionName() == 'payment') ? 'active' : '' ); ?>"><span><strong>4</strong>Payment</span></a></li>
+</ul>
+<?php */ ?>
+
+
+<?php /* ?>
+ <div id="shopContactWrap">
+ <a href="<?php echo $this->getUrl('checkout/cart') ?>">
+      <div class="shopContactBlock <?php echo ((Mage::app()->getRequest()->getActionName()=='index') ? 'active' : '' ); ?>">
+        <div class="<?php echo ((Mage::app()->getRequest()->getActionName()=='index') ? 'shopContactone-act' : 'shopContactone shopContactcomp' ); ?>" style="padding-right:50px;">
+           <h3>Review your order</h3>
+        </div>
+      </div>
+</a>
+    <?php if(Mage::getSingleton('customer/session')->isLoggedIn()):?>
+       <a href="<?php echo $this->getUrl('onestepcheckout/index/address/') ?>">
+     <?php endif; ?>
+  <div class="shopContactBlock <?php echo ((Mage::app()->getRequest()->getActionName()=='address') ? 'active' : '' ); ?>" style="padding-right:50px;">
+      
+    <div class="<?php if(Mage::app()->getRequest()->getActionName()=='index'){echo "shopContacttwo";}else{ echo ((Mage::app()->getRequest()->getActionName()=='address') ? 'shopContacttwo-act' : 'shopContacttwo shopContacttwo-actmore' );} ?> ">
+      <h3>Provide Shipping Address</h3>
+    </div>
+  </div>
+     <?php if(Mage::getSingleton('customer/session')->isLoggedIn()):?>
+       </a>
+     <?php endif; ?>
+
+  <div class="shopContactBlock" <?php if(Mage::app()->getRequest()->getActionName()=='payment'){echo "style='cursor: pointer;'"; } ?>>
+    <div class="<?php echo ((Mage::app()->getRequest()->getActionName()=='payment') ? 'shopContactthree-act' : 'shopContactthree' ); ?>">
+      <h3>Make Payment</h3>
+    </div>
+  </div>
+</div>
+
+<?php */ ?>

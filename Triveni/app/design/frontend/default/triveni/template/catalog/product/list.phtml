@@ -1,0 +1,90 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php 
+    $_productCollection=$this->getLoadedProductCollection();
+    $_helper = $this->helper('catalog/output');
+?>
+<div class="right_container category-products" >
+	<?php echo $this->getToolbarHtml() ?>
+      <?php if(!$_productCollection->count()): ?>
+			<div class="category_section"><p class="note-msg"><?php echo $this->__('There are no products matching the selection.') ?></p></div>
+	  <?php else: ?>
+	  			
+    		<?php $_collectionSize = $_productCollection->count() ?>
+		    <?php $_columnCount = $this->getColumnCount(); ?>
+		    	<div class="category_section">
+                	<ul id="products-list" class="products-grid gallery">
+				<?php $i=0; foreach ($_productCollection as $_product): 
+				 	$_newProduct = Mage::getModel('catalog/product')->load($_product->getId())->getData();
+				 	$imgpath = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . 'catalog/product' . $_newProduct['category_image'];
+				?>
+    				<li class="gallery">
+    					<a href="<?php echo $_product->getProductUrl() ?>">
+	                    	<h3><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?> - <?php echo $_product->getSku(); ?></h3>
+	                    	<img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(249,264); ?>" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true) ?>" />
+	                    </a>
+	                    <div class="btn_row">
+	                      	<?php if($_product->isSaleable()): ?>
+		                        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="btn_buynow" onclick="setLocation('<?php echo $_product->getProductUrl() ?><?php //echo $this->getAddToCartUrl($_product) ?>')"></button>
+		                    <?php else: ?>
+		                        <span><?php echo $this->__('Out of stock') ?></span>
+		                    <?php endif; ?>
+	                      
+	                      	<?php if ($this->helper('wishlist')->isAllow()) : ?>
+                            	<a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" style="text-decoration:none;">
+                            		<button type="button" class="btn_shortlist" onclick="setLocation('<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>')"></button>
+                            	</a>
+                        	<?php endif; ?>	
+                        							
+                            <a href="<?php //echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(249,264); ?><?php echo $imgpath; ?>" rel="lightbox<?php echo $i; ?>[gallery1]" class="zoom_icon">&nbsp;</a>
+                            <script type="text/javascript" charset="utf-8">
+								jQuery(document).ready(function(){
+									jQuery("area[rel^='lightbox<?php echo $i; ?>']").prettyPhoto();
+									jQuery(".gallery:first a[rel^='lightbox<?php echo $i; ?>']").prettyPhoto({animation_speed:'normal',theme:'light_square',slideshow:3000, autoplay_slideshow: false});
+									jQuery(".gallery:gt(0) a[rel^='lightbox<?php echo $i; ?>']").prettyPhoto({animation_speed:'fast',slideshow:10000, hideflash: true});
+								});
+						</script>                      
+	                    </div>
+	                  </li>
+	                  <?php $i++; ?>
+				<?php endforeach ?>
+		        </ul>
+              </div>
+		   <script type="text/javascript">decorateGeneric($('ul.products-grid'), ['odd','even','first','last'])</script>
+    		 
+	<?php endif; ?>	  
+	<div style="display:none;">
+	<?php echo $this->getToolbarHtml() ?>  					
+	</div>
+</div>

@@ -1,0 +1,124 @@
+<?php
+$_coreHelper = $this->helper('core');
+$checkoutHelper = Mage::helper('onestepcheckout/checkout');
+if(!$checkoutHelper->canRun()) {
+    $message = base64_decode('PGRpdiBzdHlsZT0iYm9yZGVyOiAzcHggc29saWQgcmVkOyBwYWRkaW5nOiA1cHg7IG1hcmdpbi1ib3R0b206IDE1cHg7IG1hcmdpbi10b3A6IDE1cHg7Ij5QbGVhc2UgZW50ZXIgYSB2YWxpZCBzZXJpYWwgZm9yIHRoZSBkb21haW4gIltET01BSU5dIiBpbiB5b3VyIGFkbWluaXN0cmF0aW9uIHBhbmVsLiBJZiB5b3UgZG9uJ3QgaGF2ZSBvbmUsIHBsZWFzZSBwdXJjaGFzZSBhIHZhbGlkIGxpY2Vuc2UgZnJvbSA8YSBocmVmPSJodHRwOi8vd3d3Lm9uZXN0ZXBjaGVja291dC5jb20iPnd3dy5vbmVzdGVwY2hlY2tvdXQuY29tPC9hPjwvZGl2Pg==');
+    $message = str_replace('[DOMAIN]', $_SERVER['SERVER_NAME'], $message);
+    echo $message;
+}else { ?>
+    <?php
+    $this->getItemsDetails();
+    $newDiscTotal = Mage::helper('onestepcheckout')->getSavingofTotal();
+    $newSubTotal =  Mage::helper('onestepcheckout')->getNewSubTotal();
+    $newGrandTotal =  Mage::helper('onestepcheckout')->newGrandTotal();
+    ?>
+    <div class="order-block">
+       		<p class="order-summary"><?php echo $this->__('Your Order Summary') ?></p>
+       		<div class="edit-order"><a href="<?php echo Mage::helper('checkout/cart')->getCartUrl(); ?>"><?php echo $this->__('Edit Order') ?></a></div>
+       </div>
+       <div class="order-block-head">
+       		<div class="products"><?php echo $this->__('Products') ?></div>
+       		<div class="code"><?php echo $this->__('Code') ?></div>
+       		<div class="qty"><?php echo $this->__('QTY.') ?></div>
+       		<div class="rate"><?php echo $this->__('Rate (USD)') ?></div>
+       </div>
+       <?php 	$i = 1;
+       			foreach($this->getItems() as $item): 
+             	$_model = Mage::getModel('catalog/product')->load($item->getProductId());
+       	?>
+       <div class="product-block">
+	       <div class="products">
+	       		<div class="prd"><img src="<?php echo $this->helper('catalog/image')->init($_model, 'thumbnail')->resize(80,80); ?>" alt="" /></div>
+	       		<div class="prd-data">
+	       			<div class="prdname"><?php  echo $item->getName(); ?></div>
+	       				<?php if ($_options = $_model->getOptions()):?>
+						<?php $data = ''; 
+							  foreach ($_model->getOptions() as $value) : ?>
+								<?php $values = $value->getValues(); ?>
+								<?php $head = $this->htmlEscape($value->getTitle()); ?>
+		            			<div class="addon"><?php echo substr($this->htmlEscape($value->getTitle()),0,12) . '...'; ?></div>
+								<?php foreach ($values as $values) : $data.=  $values->getTitle() . ' ,'; endforeach; ?>
+						<?php endforeach; ?>
+						<div class="truncated addon-data hover<?php echo $i; ?>" style="position:relative;">
+								<?php $str = trim($data,','); echo substr($str, 0, 10) . '...'; ?>
+								<div id="hovertext<?php echo $i; ?>" class="hoverTextSummery"><b><?echo $head; ?></b><br /><?php echo $str; ?></div>
+						</div>
+					<?php endif;?>
+	       			<script>
+					    jQuery(function () { jQuery('.hover<?php echo $i; ?>').hover(
+					        function () { jQuery('#hovertext<?php echo $i; ?>').show();
+					        },function () {jQuery('#hovertext<?php echo $i; ?>').hide();});
+					    });
+					</script>
+       				<?php /* ?>
+	       			<div class="discount">Discount</div>
+	       			<?php */ ?>
+	       		</div>
+	       	</div>
+       		<div class="code"><?php echo trim($item->getSku(),'-'); ?></div>
+       		<div class="qty"><?php echo $item->getQty(); ?></div>
+       		<div class="rate">
+       			<span>
+					<?php if($checkoutHelper->settings['display_tax_included']): ?>
+		            	<?php echo $this->helper('checkout')->formatPrice($this->helper('checkout')->getPriceInclTax($item)); ?>
+		            <?php else: ?>
+		            	<?php echo $this->helper('checkout')->formatPrice($item->getRowTotal()); ?>
+		            <?php endif; ?>
+				</span>
+       		</div>
+       </div>
+       <?php
+       		$i++; 
+       		endforeach; 
+       	?>
+       	
+       	<?php if(Mage::app()->getRequest()->getActionName() == 'payments'): ?>
+       	<div class="shipping-block">
+       		<p class="order-summary"><?php echo $this->__('Shipping Details') ?></p>
+       		<div class="edit-order"><a href="<?php echo $this->getUrl('onestepcheckout/index/detail') ?>"><?php echo $this->__('Edit Shipping Details') ?></a></div>
+       </div>
+       <div class="shipping-address">
+	       <div class="data">
+	       	<?php 
+	       		$shippingAddress = Mage::getSingleton('core/session')->getShipping();
+	       		$shippingMethod = Mage::getSingleton('core/session')->getShippingMethod();
+	       		$country_name = Mage::app()->getLocale()->getCountryTranslation($shippingAddress['country_id']); 
+	       	?>
+		       <ul>
+		       		<li class="first"><?php echo $this->__('Shipping Address: ')?></li>
+		       		<li class="sec"><?php echo $shippingAddress['firstname'] ?> <?php echo $shippingAddress['middlename'] ?> <?php echo $shippingAddress['lastname'] ?> <?php echo $shippingAddress['street'] ?>, <?php echo $shippingAddress['city'] ?> - <?php echo $shippingAddress['postcode'] ?> - <?php echo $country_name ?></li>
+		       		<li class="first"><?php echo $this->__('Shipping Method: ') ?></li>
+		       		<li class="sec"><?php echo $shippingMethod['shipping_method']; ?></li>
+		       </ul>
+	       </div>
+       </div>
+       	<?php endif; ?>
+       	
+       	
+       <?php 
+			$quote = Mage::getSingleton('checkout/session')->getQuote();
+			foreach ($quote->getAllItems() as $item){
+		    	$total = $total + $item->getDiscountAmount();
+		    }
+		    if($total > 0):
+		?>
+			<div class="discount-block">
+	       		<div class="coupen"><?php echo $this->__('Discount Coupon ') ?><span><?php echo $this->__('(CouponName)') ?></span></div>
+	       		<div class="amount">$ <?php echo $total; ?></div>
+			</div>
+		<?php else: ?>
+			<!-- Blank -->
+		<?php endif; ?>
+				
+			<?php foreach($this->getTotals() as $total): ?>
+				<?php $code = $total->getCode(); ?> 
+				<?php $value = $total->getValue(); ?> 
+			<?php endforeach; ?>
+			
+            <div class="total-block">
+	       		<div class="coupen"><?php echo $this->__('Total') ?></div>
+	       		<div class="amount"><?php echo $this->helper('checkout')->formatPrice($value); ?></div>
+			</div>
+       	<br />
+		<br />
+<?php } ?>

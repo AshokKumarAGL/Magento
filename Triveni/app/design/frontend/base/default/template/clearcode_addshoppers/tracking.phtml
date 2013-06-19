@@ -1,0 +1,23 @@
+ <style type="text/css">
+   div.share-buttons-fb-like {width: 260px;}
+   div.share-custom-container {width: 260px;}
+   .share-buttons-fb-like .share-custom-container span  {width: 260px !important;}
+   iframe.fb_ltr {width: 260px !important;}
+   div.top-container {margin-bottom: 0px;  text-align: justify}
+   .header-container .top-container {margin-bottom: 0px;  text-align: justify}
+   .header-container {margin-bottom: 0px;}
+   div.share-buttons-og { margin-right: 5px !important;}
+   .og-want {margin-top: 2px !important;}
+   .og-own {margin-top: 2px !important;}
+ </style>
+ <?php echo $this->getOGButtonsStyle(); ?>
+<script type="text/javascript">
+    AddShoppersTracking = <?php echo $this->getJSONConfig(); ?>;
+
+    var js = document.createElement('script'); js.type = 'text/javascript'; js.async = true; js.id = 'AddShoppers';
+    js.src = ('https:' == document.location.protocol ? 'https://shop.pe/widget/' : 'http://cdn.shop.pe/widget/') + 'widget_async.js#<?php echo $this->getShopId(); ?>';
+    document.getElementsByTagName("head")[0].appendChild(js);
+</script>
+<div style="display: none;">
+    <?php echo $this->getOGTags(); ?>
+</div>

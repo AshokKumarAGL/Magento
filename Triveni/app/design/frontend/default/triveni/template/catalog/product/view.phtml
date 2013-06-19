@@ -1,0 +1,888 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Product view template
+ *
+ * @see Mage_Catalog_Block_Product_View
+ * @see Mage_Review_Block_Product_View
+ */
+?>
+<?php $_helper = $this->helper('catalog/output'); ?>
+<?php $_product = $this->getProduct(); ?>
+<?php $attributes = $_product->getAttributes(); ?>
+<script type="text/javascript">
+    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
+</script>
+
+
+	<div id="messages_product_view"><?php echo $this->getMessagesBlock()->getGroupedHtml() ?></div>
+      <div class="main_section">
+        
+            <div class="left_section">
+            <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+            	<input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
+            	<input type="hidden" name="related_product" id="related-products-field" value="" />
+            <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
+            <div class="bigImage_area gallery">
+            	<div class="clearfix"> 
+            			<?php echo $this->getChildHtml('media') ?>
+            	</div>
+             </div>
+            <script type="text/javascript">
+				jQuery(document).ready(function(){
+					jQuery("area[rel^='lightbox']").prettyPhoto();
+					jQuery(".gallery:first a[rel^='lightbox']").prettyPhoto({animation_speed:'normal',theme:'light_square',slideshow:3000, autoplay_slideshow: false});
+					jQuery(".gallery:gt(0) a[rel^='lightbox']").prettyPhoto({animation_speed:'fast',slideshow:10000, hideflash: true});
+				});
+			</script>
+            <div class="detail_section">
+                  <p><strong><?php echo $this->__('Product Code:') ?></strong> <span><?php echo $_product->getSku() ?></span></p>
+                  <div class="row">
+                 
+                 <?php //echo $this->getReviewsSummaryHtml($_product, false, true)?>
+	             <?php //echo $this->getChildHtml('alert_urls') ?>
+	             <?php echo $this->getChildHtml('product_type_data') ?>
+	             <?php //echo $this->getTierPriceHtml() ?>
+	             <?php //echo $this->getChildHtml('extrahint') ?>
+                 
+                  <a href="<?php echo $this->helper('wishlist')->getAddUrl($_product) ?>" class="btn_shortlist">&nbsp;</a>
+                  </div>
+                  <p><strong><?php echo $this->__('Ships in 3-5 days') ?></strong></p>
+                  <p>
+				  <?php echo substr($_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description'),0,200); ?>
+				  ...<a id="show_desc" onclick="show_desc();">More</a>
+				  <div class="popup_desc" id="DescAll" style="display:none;">
+					<a href="#" class="btn_close" id="btn_close_DescAll" onclick="hide_desc();">&nbsp;</a>
+					<div class="inner_sec"><p><?php echo $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description') ?></p></div>        
+				  </div>				  
+				  </p>
+                  <?php //echo $this->getChildHtml('product_additional_data') ?>
+                  <div class="table_section">
+                  <?php if($_product->getFabric()): ?>
+                  	<div class="table_row">
+                    	<div class="cols_01"><span><?php echo $this->__('Fabric') ?></span></div>
+                        <div class="cols_02"><span><?php echo $_product->getFabric() ?></span></div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if($_product->getType()): ?>
+                    <div class="table_row">
+                    	<div class="cols_01"><span><?php echo $this->__('Type') ?></span></div>
+                        <div class="cols_02"><span><?php echo $_product->getType() ?></span></div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if($_product->getColor()): ?>
+                    <div class="table_row">
+                    	<div class="cols_01"><span><?php echo $this->__('Colors') ?></span></div>
+                        <div class="cols_02"><span><?php echo $attributes["color"]->getFrontend()->getValue($_product); ?></span></div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if($_product->getOccasions()): ?>
+                    <div class="table_row">
+                    	<div class="cols_01"><span><?php echo $this->__('Occasions') ?></span></div>
+                        <div class="cols_02"><span><?php echo $attributes["occasions"]->getFrontend()->getValue($_product); ?></span></div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if($_product->getWeight()): ?>
+                    <div class="table_row">
+                    	<div class="cols_01"><span><?php echo $this->__('Weight') ?></span></div>
+                        <div class="cols_02"><span><?php echo $_product->getWeight() ?></span></div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if($_product->getDimension()): ?>
+                    <div class="table_row">
+                    	<div class="cols_01"><span><?php echo $this->__('Dimensions') ?></span></div>
+                        <div class="cols_02"><span><?php echo $_product->getDimension() ?></span></div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if($_product->getBluseLength()): ?>
+                    <div class="table_row last">
+                    	<div class="cols_01"><span><?php echo $this->__('Bluse Length') ?></span></div>
+                        <div class="cols_02"><span><?php echo $_product->getBluseLength() ?></span></div>
+                    </div>
+                    <?php endif; ?>
+                  </div>
+                  <?php if ($_product->isSaleable() && $this->hasOptions()):?>
+			            	<?php echo $this->getChildChildHtml('container2', '', true, true) ?>
+                  <?php endif;?>
+                  <p class="measurements">
+                   		<a href="#" id="measureOpen">
+                   			<strong>
+                   				<?php 
+                   					/*
+                   					 $_category = Mage::registry('current_category'); 
+                   					  if($_category->getId() == 4): echo $this->__('Submit Salwar Suit'); 
+                   					  elseif($_category->getId() == 5): echo $this->__('Submit lehanga'); 
+                   					  else: echo $this->__('Submit saree'); endif; 
+                   					  echo $this->__(' measurement form'); 
+                   					 */
+                   				echo $this->__('Working: measurement form'); 
+                   				?>
+                   			</strong><br />
+                  		</a>
+                  </p>
+                  <div class="links">
+                  	<ul>
+                    	<li><a target="_blank" href="<?php echo $this->getUrl(''); ?>shipping-policy"><?php echo $this->__('Shipping Time') ?></a></li>
+                    	<li><a target="_blank" href="<?php echo $this->getUrl(''); ?>return-exchange-policy"><?php echo $this->__('Return Policy') ?></a></li>
+                    	<li><a target="_blank" href="<?php echo $this->getUrl(''); ?>shipping-policy"><?php echo $this->__('Shipping Charges') ?></a></li>
+                    </ul>
+                  </div>
+                  <div class="quantity_row">
+                  	<?php echo $this->getChildHtml('addtocart') ?>
+                  </div>
+                  <div class="bottom_text">
+                  	<?php 
+                  		$session = Mage::getSingleton('customer/session');
+						if($session->isLoggedIn()) {
+                  	?>
+	                  	<div class="form_area">
+	                    	<div class="formrow">
+	                        	<div class="cols_01">
+	                            	<label><?php echo $this->__('Ship to:')?></label>
+	                                <select>
+	                                <?php 
+	                                	$customer = Mage::getSingleton('customer/session')->getCustomer();
+	                                	foreach ($customer->getAddresses() as $address):
+	                                ?>
+	                                	<option><?php echo $address['firstname'] . '&nbsp;' . $address['lastname']; ?>, <?php echo $address['street']; ?></option>
+	                                <?php endforeach; ?>
+	                                </select>
+	                            </div>
+	                            <div class="cols_02">
+	                            	<label><?php echo $this->__('through:')?></label>
+	                                <select>
+	                                	<option>BlueDart</option>
+	                                </select>
+	                            </div>
+	                        </div>
+	                        <div class="formrow">
+	                        	<div class="cols_01">
+	                            	<label><?php echo $this->__('Bill to:')?></label>
+	                                <select>
+	                                	<option>Arvind Safar, 210 Anupam</option>
+	                                </select>
+	                            </div>
+	                            <div class="cols_02">
+	                            	<label><?php echo $this->__('through:')?></label>
+	                                <select>
+	                                	<option>PayU</option>
+	                                </select>
+	                            </div>                            
+	                        </div>
+	                        <input type="submit" name="" value="" class="btn_fast_checkout" />
+	                    </div>
+                  	<?php }else{ ?>
+                  		<p><?php echo $this->__('You can ')?>
+                  			<a href="<?php echo Mage::helper('customer')->getLoginUrl(); ?>">
+                  				<?php echo $this->__('Login')?>
+                  			</a>
+                  				<?php echo $this->__(' and Enable Instant Checkout.')?><br />
+                  			<a href="#"><?php echo $this->__('Know more')?></a>
+                  		</p>
+                  	<?php } ?>
+                  </div>
+            </div>            
+            </form>
+            </div>
+            
+            <script type="text/javascript">
+			    //<![CDATA[
+			        var productAddToCartForm = new VarienForm('product_addtocart_form');
+			        productAddToCartForm.submit = function(button, url) {
+			            if (this.validator.validate()) {
+			                var form = this.form;
+			                var oldUrl = form.action;
+			
+			                if (url) {
+			                   form.action = url;
+			                }
+			                var e = null;
+			                try {
+			                    this.form.submit();
+			                } catch (e) {
+			                }
+			                this.form.action = oldUrl;
+			                if (e) {
+			                    throw e;
+			                }
+			
+			                if (button && button != 'undefined') {
+			                    button.disabled = true;
+			                }
+			            }
+			        }.bind(productAddToCartForm);
+			
+			        productAddToCartForm.submitLight = function(button, url){
+			            if(this.validator) {
+			                var nv = Validation.methods;
+			                delete Validation.methods['required-entry'];
+			                delete Validation.methods['validate-one-required'];
+			                delete Validation.methods['validate-one-required-by-name'];
+			                // Remove custom datetime validators
+			                for (var methodName in Validation.methods) {
+			                    if (methodName.match(/^validate-datetime-.*/i)) {
+			                        delete Validation.methods[methodName];
+			                    }
+			                }
+			
+			                if (this.validator.validate()) {
+			                    if (url) {
+			                        this.form.action = url;
+			                    }
+			                    this.form.submit();
+			                }
+			                Object.extend(Validation.methods, nv);
+			            }
+			        }.bind(productAddToCartForm);
+			    //]]>
+    		</script>
+            <div class="right_section">
+            	<h3><?php echo $this->__('Recommended Products') ?></h3>	
+				<?php 
+					echo $this->getLayout()->createBlock('catalog/product_list_related')->setTemplate('catalog/product/list/related.phtml')->toHtml();
+				?>
+            </div>
+      </div>
+    <?php  if($this->getChildHtml('recently_viewed')){ echo $this->getChildHtml('recently_viewed'); } ?>
+    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('triveni_footertopcontent')->toHtml();?>
+      
+
+ <script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery('.jqzoom').jqzoom({
+	            zoomType: 'reverse',
+	            lens:true,
+	            preloadImages: false,
+	            alwaysOn:false
+	        });
+		//$('.jqzoom').jqzoom();
+	});
+	
+	function setDataValue(data){
+		
+	}
+	
+	jQuery('.imageClick').click(function() {
+		var imagepath = $(this).readAttribute('rel');
+		jQuery('.jqzoom').attr("src", imagepath);
+		
+		var imagepath1 = $(this).readAttribute('abs');
+		jQuery('.jqzoom').attr("href", imagepath1);
+		
+		   
+		//jQuery('.jqzoom').attr("href", imagepath);
+		
+	});
+</script>     
+
+<?php 
+   	$heightLenght = 70;
+   	$increaseHeight = 1/2;
+?>
+<!--- Measurement Popup Starts -->
+<div class="ui-widget-bg">&nbsp;</div>
+
+<div class="measurement_popup" id="measurePopup">
+  <h3><?php echo $this->__('Your Information ')?><a href="#" id="measureClose" class="btn_close">&nbsp;</a></h3>
+  <form name="measurement_form" id="measurement_form" method="post" action="">
+  <div class="form_container">
+    <div class="form_row">
+      <label><?php echo $this->__('Full Name')?></label>
+      <input type="text" name="full_name" id="full_name" value="" class="input-text required-entry input_bg01" />
+    </div>
+    <div class="form_row">
+      <label><?php echo $this->__('Email Id')?></label>
+      <input type="text" name="email_id" id="email_id" value="" class="input-text required-entry validate-email input_bg01" />
+    </div>
+    <div class="form_row">
+      <label><?php echo $this->__('Size Name')?></label>
+      <input type="text" name="size_name" id="size_name" value="" class="input_bg02 required" />
+      <span id="select_stored_size"><a href="#"><?php echo $this->__('Select Stored Size')?></a></span>
+      	
+      	<div id="size_name_loading" style="display: none; width:44px; padding-top: 38px; margin-left:300px;" class="loading-ajax">&nbsp;</div>
+	  	<div id="size_name_loading_error" class="customer-error" style="display: none;">&nbsp;</div>
+	  
+      <p><?php echo $this->__('( Your measurement will be saved with this keyword, which will be helpful to you later / next time you fill in the measurement form. Example. Mom Measurement, Sister etc. )')?></p>
+    </div>
+    
+    
+    <div class="left_cols">
+    
+	  <div class="form_row" id="sizeloaddata" style="display:block; align:center;"></div>
+    
+      <div class="form_row">
+        <label><strong><?php echo $this->__('Measurement in')?></strong></label>
+        <div class="radio_button"><small>
+          <input type="radio" name="measurement_in" id="SetMeasurementInches" checked="checked" onclick="setDataValue('Inches');" value="" />
+          </small> <span><?php echo $this->__('Inches')?></span><small>
+          <input type="radio" name="measurement_in" id="SetMeasurementCentemeters" onclick="setDataValue('Centemeters');" value="" />
+          </small> <span><?php echo $this->__('Centemeters')?></span></div>
+      </div>
+      <p><strong><?php echo $this->__('Measurement used ( Choose this option if )')?></strong></p>
+      <div class="form_row">
+        <div class="radio_button"><small>
+          <input type="radio" name="measurement_used" id="measurement_used_body" value="" class="required" />
+          </small> <span class="wid"><?php echo $this->__('Body-You want to submit body measurement and our tailor will give suitable loosening as per tailoring principles.')?></span></div>
+      </div>
+      <div class="form_row">
+        <div class="radio_button"><small>
+          <input type="radio" name="measurement_used" id="measurement_used_garment" value="" />
+          </small> <span class="wid"><?php echo $this->__('Garment-You want to submit ready garment measurement and you do not want loosening on submitted numbers. ')?></span></div>
+      </div>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    <div class="bottom_form" id="bottom_form_value">
+      <div class="form_row01">
+        <label><?php echo $this->__('1. Around Bust ')?></label>
+        <select name="around_bust" id="around_bust_data" class="select_bg">
+          <option value="">None</option>
+          <?php for($height = 25; $height < 70; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span> 
+        <small class="ques_icon" id="around_bust">
+        <a href="#">&nbsp;</a></small> 
+        
+        <div class="popup_small" id="around_bust_div" style="display:none;">
+		    <a href="#" class="btn_close" id="innerClose">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/size01.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Place the tape well up under arms, straight across the back & over the bust in the front and measure the fullest part of the bust. ') ?></p>
+	    </div> 
+      </div>
+      <div class="form_row01">
+        <label><?php echo $this->__('2. Around Above Waist ')?></label>
+        <select name="around_above_waist" id="around_above_waist_data" class="select_bg">
+          <option value=""><?php echo $this->__('None')?></option>
+          <?php for($height = 20; $height < 65; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span> 
+        <small class="ques_icon" id="aroundabovewaist"><a href="#">&nbsp;</a></small> 
+      	
+      	<div class="popup_small" id="aroundabovewaist_div" style="display:none;">
+		    <a href="#" class="btn_close" id="innerClose_aroundabovewaist">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/aroundawaist.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Place the tape well up under arms, straight across the back and measure this from just under the bust and just above the waist. ') ?></p>
+	    </div> 
+      	
+      </div>
+      <div class="form_row01">
+        <label><?php echo $this->__('3. Shoulder ')?></label>
+        <select name="shoulder" id="shoulder_data" class="select_bg">
+          <option value=""><?php echo $this->__('None')?></option>
+          <?php for($height = 13; $height < 20; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span> 
+        <small class="ques_icon" id="shoulder"><a href="#">&nbsp;</a></small> 
+      
+      	<div class="popup_small" id="shoulder_div" style="display:none;" >
+		    <a href="#" class="btn_close" id="innerClose_shoulder">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/shoulder.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Place the tape well up under arms, straight across the back and measure this from just under the bust and just above the waist. ') ?></p>
+	    </div> 
+      
+      </div>
+      <div class="form_row01">
+        <label><?php echo $this->__('4. Sleeve Style')?></label>
+        <select name="sleeve_style" id="sleeve_style_data" class="select_bg">
+          <option value="">None</option>
+          <?php 
+          		$sleevStyle = array('Asymmetrical','Cap Sleeves','Drawstring-1','Drawstring-2','Flutter','Half Sleeves','Puff Sleeves','Short Sleeves','Sleeveless','Elbow Sleeves');
+          		for($height = 0; $height < count($sleevStyle); $height++): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $sleevStyle[$height]; ?></option>
+          <?php endfor; ?>
+        </select>
+        <small class="ques_icon" id="sleeve_style"><a href="#">&nbsp;</a></small>
+        
+        <div class="popup_big" id="sleeve_style_div" style="display:none;">
+	      	<a href="#" class="btn_close" id="btn_close_sleeve_style">&nbsp;</a>
+	        <h4><?php echo $this->__('4. Sleeve Style') ?></h4>
+	        <div class="inner_sec">
+	        	<ul>
+	            	<li><strong><?php echo $this->__('Asymmetrical') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves2.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Cap Sleeves') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves3.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Drawstring-1') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves4.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Drawstring-2') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves5.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Flutter') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves6.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Half Sleeves') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves7.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Puff Sleeves') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves8.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Short Sleeves') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves9.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Sleeveless') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves10.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Elbow Sleeves') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves11.jpg') ?>" width="111" height="133" alt="" /></li>
+	            </ul>
+	      	</div>        
+    	</div>
+         
+      </div>
+      <div class="form_row01">
+        <label><?php echo $this->__('5. Sleeve Length ')?></label>
+        <select name="sleeve_length" id="sleeve_length_data" class="select_bg">
+          <option value="">None</option>
+          <?php for($height = 1; $height < 13; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span> 
+		<small class="ques_icon" id="sleevelength"><a href="#">&nbsp;</a></small> 
+	  
+		<div class="popup_small" id="sleevelength_div" style="display:none;">
+		    <a href="#" class="btn_close" id="innerClose_sleevelength">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/sleevelength.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Starting from the outside edge of shoulder bone and measure upto the desired length. ') ?></p>
+	    </div>
+		
+	  </div>
+      <div class="form_row01">
+        <label><?php echo $this->__('6. Around Arm Hole ')?></label>
+        <select name="around_arm_hole" id="around_arm_hole_data" class="select_bg">
+          <option value="">None</option>
+          <?php for($height = 5; $height < 25; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span> 
+		<small class="ques_icon" id="aroundarmhole"><a href="#">&nbsp;</a></small>
+        <div class="popup_small" id="aroundarmhole_div" style="display:none;">
+		    <a href="#" class="btn_close" id="innerClose_aroundarmhole">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/armhole.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('From the highest point on shoulder measure around arm hole with your arm hanging down.  ') ?></p>
+	    </div>
+		
+		</div>
+      <div class="form_row01">
+        <label><?php echo $this->__('7. Around Arm ')?></label>
+        <select name="around_arm" id="around_arm_data" class="select_bg">
+          <option value="">None</option>
+          <?php for($height = 5; $height < 25; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span> 
+		<small class="ques_icon" id="aroundarm"><a href="#">&nbsp;</a></small>
+		<div class="popup_small" id="aroundarm_div" style="display:none;">
+		    <a href="#" class="btn_close" id="innerClose_aroundarm">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/aroundarm.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Measure the middle of bisceps level of your arm keeping the hand relaxed.  ') ?></p>
+	    </div>
+		</div>
+      <div class="form_row01">
+        <label><?php echo $this->__('8. Front Neck Style ')?></label>
+        <select name="front_neck_style" id="front_neck_style_data" class="select_bg">
+          <option value="">None</option>
+          <?php 
+          		$frontNeckStyle  = array('Rounded Sweet-heart','Design-1','Design-2','Bustier','Butterfly-bustier','Decollete','String Style','Envelope','Halter neck 1','Halter neck 2','Halter neck 3','One-shoulder','Horse Shoe','Pointed u-neck','Square','Sweet-heart','Sweet-heart with collar','U-neck','V-neck','Off-shoulder','Chinese Collar','Scalloped','Design-3','Design-4','Design-5','Design-6','Design-7','Design-8','Design-9','Design-10','Design-11','Design-12','Design-13','Design-14','Design-15','Design-16','Design-17');
+          		for($height = 0; $height < count($frontNeckStyle); $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $frontNeckStyle[$height]; ?></option>
+          <?php endfor; ?>
+        </select>
+		<span><?php echo $this->__('(Inches)')?></span> 
+        <small class="ques_icon" id="frontneckstyle"><a href="#">&nbsp;</a></small>
+		<div class="popup_big" id="frontneckstyle_div" style="display:none;">
+	      	<a href="#" class="btn_close" id="btn_close_frontneckstyle">&nbsp;</a>
+	        <h4><?php echo $this->__('8. Front Neck Style') ?></h4>
+	        <div class="inner_sec">
+	        	<ul>
+	            	<li><strong><?php echo $this->__('Rounded Sweet-heart') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck2.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Design-1') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck3.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Design-2') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck4.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Bustier') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck5.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Butterfly-bustier') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck6.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Decollete') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck7.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('String Style') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck8.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Envelope') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck9.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Halter neck 1') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck10.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Halter neck 2') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck11.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Halter neck 3') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck12.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('One-shoulder') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck13.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Horse Shoe') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck14.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Pointed u-neck') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck15.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Square') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck16.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Sweet-heart') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck17.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Sweet-heart with collar') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck18.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('U-neck') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck19.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('V-neck') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck20.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Off-shoulder') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck21.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Chinese Collar') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck22.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Scalloped') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck23.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-3') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck24.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-4') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck25.jpg') ?>" width="111" height="133" alt="" /></li><li><strong><?php echo $this->__('U-neck') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves11.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-5') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck26.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-6') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck27.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-7') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck28.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-8') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck29.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-9') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck30.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-10') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck31.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-11') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck32.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-12') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck33.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-13') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck34.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-14') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck35.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-15') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck36.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-16') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck37.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-17') ?></strong> <img src="<?php echo $this->getSkinUrl('images/neck38.jpg') ?>" width="111" height="133" alt="" /></li>
+					
+	            </ul>
+	      	</div>   
+		</div>
+      <div class="form_row01">
+        <label><?php echo $this->__('9. Front Neck Depth ')?></label>
+        <select name="front_neck_depth" id="front_neck_depth_data" class="select_bg">
+          <option value="">None</option>
+          <?php for($height = 1; $height < 8; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span> 
+		<small class="ques_icon" id="frontneckdepth"><a href="#">&nbsp;</a></small>
+		<div class="popup_small" id="frontneckdepth_div" style="display:none;">
+		    <a href="#" class="btn_close" id="frontneckdepth_aroundarm">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/neck.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Measuring from the to your desired depth diagonally Back neck point.  ') ?></p>
+	    </div>
+		</div>
+      <div class="form_row01">
+        <label><?php echo $this->__('10. Back Neck Style ')?></label>
+        <select name="back_neck_style" id="back_neck_style_data" class="select_bg">
+          <option value="">None</option>
+          <?php for($height = 25; $height < $heightLenght; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span>
+		<small class="ques_icon" id="backneckstyle"><a href="#">&nbsp;</a></small>
+		<div class="popup_big" id="backneckstyle_div" style="display:none;">
+	      	<a href="#" class="btn_close" id="btn_close_backneckstyle">&nbsp;</a>
+	        <h4><?php echo $this->__('10. Back Neck Style') ?></h4>
+	        <div class="inner_sec">
+	        	<ul>
+	            	<li><strong><?php echo $this->__('Asymmetrical') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck2.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Back-bustier') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck3.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Bateu-or-boat') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck4.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('String Style-1') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck5.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('String Style-2') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck6.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('String Style-3') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck7.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('String Style-4') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck8.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Off-shoulder') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck9.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('One-shoulder-back') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck10.jpg') ?>" width="111" height="133" alt="" /></li>
+	                <li><strong><?php echo $this->__('Horse Shoe') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck11.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Pointed') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck12.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Rounded') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck13.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Square-with-laces') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck14.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('U-neck') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck15.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('V-neck') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck16.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Back-chinese-collar') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck17.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Back-butterfly-bustier') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck18.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Desgin-1') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck19.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Desgin-2') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck20.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Desgin-3') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck21.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Desgin-4') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck22.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Desgin-5') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck23.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-6') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck24.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-7') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck25.jpg') ?>" width="111" height="133" alt="" /></li><li><strong><?php echo $this->__('U-neck') ?></strong> <img src="<?php echo $this->getSkinUrl('images/sleeves11.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-8') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck26.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-9') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck27.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-10') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck28.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-11') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck29.jpg') ?>" width="111" height="133" alt="" /></li>
+					<li><strong><?php echo $this->__('Design-12') ?></strong> <img src="<?php echo $this->getSkinUrl('images/backneck30.jpg') ?>" width="111" height="133" alt="" /></li>	
+	            </ul>
+	      	</div>   
+		</div>
+      <div class="form_row01">
+        <label><?php echo $this->__('11. Back Neck Depth ')?></label>
+        <select name="back_neck_depth" id="back_neck_depth_data" class="select_bg">
+          <option value="">None</option>
+          <?php for($height = 1; $height < 10; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span>
+		<small class="ques_icon" id="backneckdepth"><a href="#">&nbsp;</a></small>
+		<div class="popup_small" id="backneckdepth_div" style="display:none;">
+		    <a href="#" class="btn_close" id="backneckdepth_aroundarm">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/backneck.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Measuring from the Back neck point to your desired depth diogonally.  ') ?></p>
+	    </div>
+		</div>
+      <div class="form_row01">
+        <label><?php echo $this->__('12. Blouse Length ')?></label>
+        <select name="blouse_length" id="blouse_length_data" class="select_bg">
+          <option value="">None</option>
+          <?php for($height = 12; $height < 18; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span>
+		<small class="ques_icon" id="blouselength"><a href="#">&nbsp;</a></small>
+        <div class="popup_small" id="blouselength_div" style="display:none;">
+		    <a href="#" class="btn_close" id="blouselength_aroundarm">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/blouselength.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Measure Length from to point of your shoulder to the desired length like show in the how to measure image.   ') ?></p>
+	    </div> 
+		</div>
+      <div class="form_row01">
+        <label><?php echo $this->__('13. Closing Side')?></label>
+        <select name="closing_side" id="closing_side_data" class="select_bg">
+          <option value="">None</option>
+          <?php 
+          		$closingSide = array('As Shown','Back','Front','As Described Below');
+          		for($height = 0; $height < count($closingSide); $height = $height+$increaseHeight): ?>
+          			<option value="<?php echo $height; ?>"><?php echo $closingSide[$height]; ?></option>
+          <?php endfor; ?>
+        </select>
+      </div>
+      <div class="form_row01">
+        <label><?php echo $this->__('14. Closing with ')?></label>
+        <select name="closing_with" id="closing_with_data" class="select_bg">
+          <option value="">None</option>
+          <?php 
+          		$closingwith = array('As Shown','Back','Front','As Described Below');
+          		for($height = 0; $height < count($closingwith); $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $closingwith[$height]; ?></option>
+          <?php endfor; ?>
+        </select>
+      </div>
+      <div class="form_row01">
+        <label><?php echo $this->__('15. Lining ')?></label>
+        <select name="lining" id="lining_data" class="select_bg">
+          <option value="">None</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+      <div class="form_row01">
+        <label><?php echo $this->__('16. Around Waist ')?></label>
+        <select name="around_waist" id="around_waist_data" class="select_bg">
+          <option value="">None</option>
+      	  <?php for($height = 25; $height < 65; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span> 
+		<small class="ques_icon" id="aroundwaist"><a href="#">&nbsp;</a></small>
+        <div class="popup_small" id="aroundwaist_div" style="display:none;">
+		    <a href="#" class="btn_close" id="aroundwaist_aroundarm">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/aroundwaist.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Measure around waist keeping the tape straight from back.    ') ?></p>
+	    </div>
+		</div>
+      <div class="form_row01">
+        <label><?php echo $this->__('17. Around Hips')?></label>
+        <select name="around_hips" id="around_hips_data" class="select_bg">
+          <option value="">None</option>
+      	  <?php for($height = 26; $height < 75; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span>
+		<small class="ques_icon" id="aroundhips"><a href="#">&nbsp;</a></small>
+		<div class="popup_small" id="aroundhips_div" style="display:none;">
+		    <a href="#" class="btn_close" id="aroundhips_aroundarm">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/aroundhips.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Measure around the upper part of the hip, keeping the tape straight from back and front.    ') ?></p>
+	    </div>
+		</div>
+      <div class="form_row01">
+        <label><?php echo $this->__('18. Petticoat Length ')?></label>
+        <select name="petticoat_length" id="petticoat_length_data" class="select_bg">
+          <option value="">None</option>
+      	  <?php for($height = 30; $height < 45; $height = $height+$increaseHeight): ?>
+          	<option value="<?php echo $height; ?>"><?php echo $height ?></option>
+          <?php endfor; ?>
+        </select>
+        <span><?php echo $this->__('(Inches)')?></span> 
+		<small class="ques_icon" id="petticoatlength"><a href="#">&nbsp;</a></small>
+		<div class="popup_small" id="petticoatlength_div" style="display:none;">
+		    <a href="#" class="btn_close" id="petticoatlength_aroundarm">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/petticoatlength.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Measuring from the waist, measure upto the desired length.    ') ?></p>
+	    </div>
+		</div>
+      <div class="form_row01">
+        <label><?php echo $this->__('(H). Your Height')?></label>
+        <select name="your_height" id="your_height" class="select_bg">
+          <option value="">None</option>
+          
+        </select>
+        
+        <span><?php echo $this->__('(Inches)')?></span>
+		<small class="ques_icon" id="yourheight"><a href="#">&nbsp;</a></small>
+		<div class="popup_small" id="yourheight_div" style="display:none;">
+		    <a href="#" class="btn_close" id="yourheight_aroundarm">&nbsp;</a>
+		    <img src="<?php echo $this->getSkinUrl('images/height.jpg') ?>" width="200" height="250" alt="" />
+		    <p><?php echo $this->__('Stand in stocking feet with your feet slightly apart and your back to a wall. Measure from the floor to the top of your head.     ') ?></p>
+	    </div>
+		</div>
+      </div>
+      
+      
+      
+      
+      
+      
+      
+      <p><?php echo $this->__('If any point is not covered in above form or if you want to add some special instructions or clarification, use the below box :') ?></p>
+	      <div class="form_row01">
+	        <label><?php echo $this->__('Instructions') ?></label>
+	        <textarea name="instructions" id="instructions" cols="1" rows="1" class="textarea_cols"></textarea>
+	      </div>
+	      <div class="form_row01">
+	      		
+	      	<!-- This div add by Ashok -->
+	      		<div id="customsizeloading" style="display: none; width:44px;padding-left:600px;" class="loading-ajax">&nbsp;</div>
+				<div id="customsizeloadingerror" class="customer-error" style="display: none;">&nbsp;</div>
+	       	<!-- Ending fo this -->
+	       		
+	        	<input type="button" id="CustomsizeData" value="" class="btn_save" />
+	      </div>
+    </div>
+    
+    
+    
+    
+    
+    </div>
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+  </div>
+  
+  
+  
+  
+  
+   <div class="right_cols"><img src="<?php echo $this->getSkinUrl('images/meas-final2.jpg') ?>" width="199" height="365" /><br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <img src="<?php echo $this->getSkinUrl('images/meas-final1.jpg') ?>" width="145" height="365" /></div>
+  </div>
+  </form>
+  <script type="text/javascript">
+	//<![CDATA[
+		var dataForm = new VarienForm('measurement_form', true);
+	//]]>
+  </script>
+  <script>
+  	jQuery.noConflict();
+  	function saveCustomForm(){
+		var baseUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK); ?>';
+		var loading = $('customsizeloading');
+      	var error = $('customsizeloadingerror');
+		var fullname = $('full_name').value;var email = $('email_id').value;
+		if(fullname == ''){alert('Please enter full name.');return false;}
+		else if(email == ''){alert('Please enter correct email id.');return false;}
+		else{ 
+	      	error.hide();loading.show();
+	        var form = $('measurement_form');
+	        var url = baseUrl+'customsize/index/customsizesave';
+	        new Ajax.Request(url, {
+	        	parameters: form.serialize(true),
+	        	method: 'POST',
+	        	onComplete: function(transport) {
+	        		if(transport.status == 200) {
+	        			var result = transport.responseText;
+	        			if(result!='SUCESS') {
+	                        loading.hide();error.update('There is some problem to submit the records.');error.show();
+	                    } else {
+	                    	loading.hide();error.update('Your detail has been submitted.');error.show();
+	                    }
+	        		}
+	        	}
+	        });
+		}
+	}
+  	$('CustomsizeData').observe('click', saveCustomForm);
+
+  	function loaddata(){
+  		var baseUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK); ?>';
+		var loading = $('size_name_loading');
+      	var error = $('size_name_loading_error');
+		var emailid = $('email_id').value;
+		
+		if(emailid == ''){
+			alert('Please Enter valid Email Address');
+			$('email_id').focus();
+			return false;
+		}else{
+			error.hide();
+	        loading.show();
+	        var sizeloaddata = $('sizeloaddata');
+	        var form = $('measurement_form');
+	        var url = baseUrl+'customsize/index/loadstoresize';
+	        new Ajax.Request(url, {
+	        	parameters: form.serialize(true),
+	        	method: 'POST',
+	        	onComplete: function(transport) {
+	        		if(transport.status == 200) {	
+	        			var result = transport.responseText;
+	        			if(result == '') {
+	                        loading.hide();
+	                        error.update(result.error);
+	                        error.show();
+	                    } else {
+	                        loading.hide();
+	                        sizeloaddata.show();
+	                        sizeloaddata.update(result);
+	                    }
+	        		}
+	        	}
+	        });
+		}
+  	}
+	$('select_stored_size').observe('click', loaddata);
+  	
+  </script>
+</div>
+<!--- Measurement Popup Ends -->

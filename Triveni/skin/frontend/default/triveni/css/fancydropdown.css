@@ -1,0 +1,23 @@
+l.tabs { display: table; margin: 0; padding: 0; list-style: none; position: relative; }
+ul.tabs li { margin: 0; padding: 0; list-style: none; display: table-cell; float: left;}
+ul.tabs a { position: relative; display: block; }
+/* dropdowns
+*************************/
+
+ul.dropdown { margin: 0; padding: 0; display: block; position: absolute; z-index: 9; top: 100%; width: 250px; display: none; left: 0; }
+ul.dropdown ul.dropdown { top: 0; left: 95%; }
+ul.dropdown li { margin: 0; padding: 0; float: none; position: relative; list-style: none; display: block; }
+ul.dropdown li a { display: block; }
+/* menu-specifc
+*************************/
+
+#menu {width: 100%;}
+#menu ul { margin: 0 auto; }
+#menu ul li.hasmore {}
+#menu ul li.hasmore a.hover{background:url(../images/menu_h.jpg) no-repeat  top -10px; color:#0e4b3c;}
+#menu ul.dropdown { width:1000px; position:absolute; top:42px; left:0; height:250px; background:url(../images/menu_bg.png) no-repeat 0 0; overflow:hidden; z-index:99999999;}
+#menu ul.dropdown li{background:none;}
+#menu ul.dropdown li a { overflow: hidden;}
+#menu ul.dropdown li.last a { border-bottom-width: 0; }
+#menu ul.dropdown li a:hover {}
+#menu ul li h4 a:hover { background-image: none; }

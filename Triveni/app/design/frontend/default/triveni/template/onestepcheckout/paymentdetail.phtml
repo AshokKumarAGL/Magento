@@ -1,0 +1,276 @@
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getSkinUrl(); ?>mft/accordian.css" /> 
+		<script type="text/javascript" src="<?php echo $this->getBaseUrl(); ?>js/mft/chili-1.7.pack.js"></script> 
+		<script type="text/javascript" src="<?php echo $this->getBaseUrl(); ?>js/mft/jquery.easing.js"></script> 
+		<script type="text/javascript" src="<?php echo $this->getBaseUrl(); ?>js/mft/jquery.dimensions.js"></script> 
+		<script type="text/javascript" src="<?php echo $this->getBaseUrl(); ?>js/mft/jquery.accordion.js"></script> 
+		<script type="text/javascript">
+			jQuery().ready(function(){
+				// simple accordion
+				jQuery('#list1a').accordion();
+				jQuery('#list1b').accordion({
+					autoheight: false
+				});
+				
+				// second simple accordion with special markup
+				jQuery('#navigation').accordion({
+					active: false,
+					header: '.head',
+					navigation: true,
+					event: 'mouseover',
+					fillSpace: true,
+					animated: 'easeslide'
+				});
+				
+				// highly customized accordion
+				jQuery('#list2').accordion({
+					event: 'mouseover',
+					active: '.selected',
+					selectedClass: 'active',
+					animated: "bounceslide",
+					header: "dt"
+				}).bind("change.ui-accordion", function(event, ui) {
+					jQuery('<div>' + ui.oldHeader.text() + ' hidden, ' + ui.newHeader.text() + ' shown</div>').appendTo('#log');
+				});
+				
+				// first simple accordion with special markup
+				jQuery('#list3').accordion({
+					header: 'div.title',
+					active: false,
+					alwaysOpen: false,
+					animated: false,
+					autoheight: false
+				});
+				
+				var wizard = $("#wizard").accordion({
+					header: '.title',
+					event: false
+				});
+				
+				var wizardButtons = $([]);
+				$("div.title", wizard).each(function(index) {
+					wizardButtons = wizardButtons.add($(this)
+					.next()
+					.children(":button")
+					.filter(".next, .previous")
+					.click(function() {
+						wizard.accordion("activate", index + ($(this).is(".next") ? 1 : -1))
+					}));
+				});
+				
+				// bind to change event of select to control first and seconds accordion
+				// similar to tab's plugin triggerTab(), without an extra method
+				var accordions = jQuery('#list1a, #list1b, #list2, #list3, #navigation, #wizard');
+				
+				jQuery('#switch select').change(function() {
+					accordions.accordion("activate", this.selectedIndex-1 );
+				});
+				jQuery('#close').click(function() {
+					accordions.accordion("activate", -1);
+				});
+				jQuery('#switch2').change(function() {
+					accordions.accordion("activate", this.value);
+				});
+				jQuery('#enable').click(function() {
+					accordions.accordion("enable");
+				});
+				jQuery('#disable').click(function() {
+					accordions.accordion("disable");
+				});
+				jQuery('#remove').click(function() {
+					accordions.accordion("destroy");
+					wizardButtons.unbind("click");
+				});
+			});
+	</script>
+
+<form action="#" id="payment_mode" id="payment_mode" method="post">
+<table class="body_main_tbl" align=center>
+	<tr>
+		<td valign=top>
+			<input type="hidden" name="order_number" id="order_number" value="<?php //echo $order_number;?>" />
+				<div class="warpper">
+					<div class="order-details">Order Details</div>
+					<div class="line"></div>
+					<div class="order-block">
+						<div class="order-details-block">
+							<div class="order-details-name">Name</div>
+							<div class="order-details-data">
+							<?php //echo $rec_name;?>
+							</div>
+							<div class="order-details-name">Order No</div>
+							<div class="order-details-data">
+							<?php //echo $order_number;?>
+							</div>
+							<div class="order-details-name">Email ID</div>
+							<div class="order-details-data">
+							<?php //echo $sen_email;?>
+							</div>
+							<div class="order-details-name">Address</div>
+							<div class="order-details-data">
+							<?php //echo $sen_address;?>
+							</div>
+							<div class="order-details-name">Amount Due</div>
+							<div class="order-details-data">
+							<input name="amount" type="hidden" value="<?php //echo $_REQUEST['amount']; ?>" />
+							</div>
+						</div>
+						<div class="order-details-block">
+							<div class="order-details-name">Extra Amount (Opt.)</div>
+							<div class="order-details-data">
+								<input name="extra_amt" id="extra_amt" type="text" />
+							</div>
+						</div>
+					</div>
+					<div class="order-block">
+						<br />
+						<div class="order-details">Payment Details</div>
+						<div class="line"></div>
+						<br />
+					</div>
+					<div class="body-line"></div>
+					<div class="basic" style="float: left;" id="list1a">
+						<a>Credit Cards</a>
+						<div style="height: 120px;">
+							<p>
+							<div class="card-border">
+								<div class="card-block">
+									<input name="account_type" type="radio" value="Visa" />
+									<img src="<?php echo $this->getSkinUrl('images/visa.jpg'); ?>" align="absmiddle" />
+								</div>
+								<div class="card-border-inner">
+									<input name="account_type" type="radio" value="Mastercard" />
+									<img src="<?php echo $this->getSkinUrl('images/mastercard.jpg'); ?>" align="absmiddle" />
+								</div>
+								<div class="card-border-inner">
+									<input name="account_type" type="radio" value="Diners Club" />
+									<img src="<?php echo $this->getSkinUrl('images/diners-club.jpg'); ?>" align="absmiddle" />
+								</div>
+								<div class="card-border-inner">
+									<input name="account_type" type="radio" value="American Express" />
+									<img src="<?php echo $this->getSkinUrl('images/americal-express.jpg'); ?>" align="absmiddle" />
+								</div>
+								<div class="card-border-inner" align="center">
+									<input type="image" src="<?php echo $this->getSkinUrl('images/pay-now.jpg'); ?>" name="submit" align="absmiddle" />
+								</div>
+							</div>
+						</p>
+						</div>
+						<div style="clear: both;"></div>
+
+						<a>Debit Cards</a>
+						<div style="height: 120px;">
+							<p>
+							<div class="card-border">
+								<div class="card-block">
+									<input name="account_type" id="account_type" type="radio" value="Visa" />
+										<img src="<?php echo $this->getSkinUrl('images/visa.jpg'); ?>" align="absmiddle" />
+								</div>
+								<div class="card-border-inner">
+									<input name="account_type" id="account_type" type="radio" value="Mastercard" />
+										<img src="<?php echo $this->getSkinUrl('images/mastercard.jpg'); ?>" align="absmiddle" />
+								</div>
+								<div class="card-border-inner" align="center">
+									<input type="image" src="<?php echo $this->getSkinUrl('images/pay-now.jpg'); ?>" name="submit" align="absmiddle" />
+								</div>
+							</div>
+							</p>
+						</div>
+						<div style="clear: both;"></div>
+						<a>Net Banking</a>
+						<div style="height: 220px;">
+							<p>
+								<br />
+							<div
+								style="border: 1px solid #e0e0e0; width: 885px; height: 185px; float: left; margin: 5px;">
+								<div
+									style="border: 0px solid #000000; width: 605px; height: 160px; float: left">
+									<div class="card-block">
+										<input name="account_type" id="account_type" type="radio"
+											value="EBS" /><img src="<?php echo $this->getSkinUrl('images/axis.jpg'); ?>" align="absmiddle" />
+									</div>
+									<div class="card-border-inner">
+										<input name="account_type" id="account_type" type="radio"
+											value="EBS" /><img src="<?php echo $this->getSkinUrl('images/federal-bank.jpg'); ?>"
+											align="absmiddle" />
+									</div>
+									<div class="card-border-inner">
+										<input name="account_type" id="account_type" type="radio"
+											value="EBS" /><img src="<?php echo $this->getSkinUrl('images/hdfc.jpg'); ?>" align="absmiddle" />
+									</div>
+									<div class="card-border-inner">
+										<input name="account_type" id="account_type" type="radio"
+											value="EBS" /><img src="<?php echo $this->getSkinUrl('images/icici.jpg'); ?>" align="absmiddle" />
+									</div>
+									<div class="card-block1">
+										<input name="account_type" id="account_type" type="radio"
+											value="EBS" /><img src="<?php echo $this->getSkinUrl('images/sbi.jpg'); ?>" align="absmiddle" />
+									</div>
+									<div class="card-border-inner1">
+										<input name="account_type" id="account_type" type="radio"
+											value="other" /><img src="<?php echo $this->getSkinUrl('images/other-banks.jpg'); ?>"
+											align="absmiddle" />
+									</div>
+									<div class="card-border-inner1" style="border-bottom: none;">&nbsp;</div>
+									<div class="card-border-inner1"
+										style="border-bottom: none; border-left: none;">&nbsp;</div>
+								</div>
+								<div
+									style="border-left: 1px solid #e0e0e0; width: 200px; height: 185px; float: left">
+									<div class="card-border-inner2" align="center">
+										<input type="image" src="<?php echo $this->getSkinUrl('images/pay-now.jpg'); ?>" align="absmiddle" />
+									</div>
+								</div>
+							</div>
+							</p>
+						</div>
+						<div style="clear: both;"></div>
+						<a>Paypal</a>
+						<div style="height: 80px;">
+							<p>
+							<div class="card-border">
+								<div class="card-block">
+									<input name="account_type" id="account_type" type="radio" value="Paypal" />
+									<img src="<?php echo $this->getSkinUrl('images/paypal.jpg'); ?>" align="absmiddle" />
+								</div>
+								<div class="card-border-inner" align="center">
+									<input type="image" src="<?php echo $this->getSkinUrl('images/pay-now.jpg'); ?>" name="submit" align="absmiddle" />
+								</div>
+							</div>
+							</p>
+						</div>
+						<a>IVR</a>
+						<div style="height: 120px;">
+							<p>
+							<div class="ca1rd-border" style="padding-left: 10px;">
+								Please note only <strong>credit cards</strong> are accepted over
+								IVR.<br />
+								<br /> As per Government Mandate, <strong>OTP</strong> is now
+								required for all IVR transactions. <span onclick="window.open('http://www.myflowertree.com/otpg');" style="cursor: pointer; color: #0000FF; text-decoration: underline;">Click
+									here</span> to see how to generate an OTP.<br />
+								<br /> To initiate payment over IVR, please call our customer
+								service at 98711 41000.<br />
+								<br /> OR-<br />
+								<br /> To self-serve, please send following sms from your
+								registered mobile:<br />
+								<br /> For example, if you need to pay Rs.1000, send following
+								sms<br /> <br /> PAY MFT 1000 CC INA send it to 5667766<br />
+								<br /> You will get a call on your mobile within 1-2 minutes.
+								Please keep your 16 digit card number, expiry date, CVV and OTP
+								handy. Please follow the instruction once you get the call. Once
+								your card has been charged successfully you will receive a
+								confirmatory SMS on your mobile within 5 minutes.<br />
+								</p>
+							</div>
+						</div>
+						<div style="clear: both;"></div>
+						<div class="order-text">
+							<p>
+								<br /> For payment assistance, please call 098711 41000 or 011
+								4583 0000.
+							</p>
+						</div>
+					</div>
+				</td>
+			</tr>
+	</table>
+</form>

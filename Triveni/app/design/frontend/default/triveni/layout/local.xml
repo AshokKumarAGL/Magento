@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+	<catalogsearch_result_index translate="label">
+		<remove name="left.newsletter" />
+	</catalogsearch_result_index>
+	<catalog_category_layered translate="label">
+	    <remove name="left.newsletter" />
+	</catalog_category_layered>
+	<awadvancedsearch_result_index translate="label">
+	    <remove name="left.newsletter" />
+	</awadvancedsearch_result_index>
+	<checkout_cart_index>
+	    <reference name="breadcrumbs">
+	        <action method="addCrumb">
+	            <crumbName>Home</crumbName>
+	            <crumbInfo><label>Home</label><title>Home</title><link>/home</link></crumbInfo>
+	        </action>
+	        <action method="addCrumb">
+	            <crumbName>Shopping Cart</crumbName>
+	            <crumbInfo><label>Shopping Cart</label><title>Shopping Cart</title><link>/checkout/cart</link></crumbInfo>
+	        </action>
+	    </reference>
+	</checkout_cart_index>
+	<testimonial_index_index>
+	    <reference name="breadcrumbs">
+	        <action method="addCrumb">
+	            <crumbName>Home</crumbName>
+	            <crumbInfo><label>Home</label><title>Home</title></crumbInfo>
+	        </action>
+	        <action method="addCrumb">
+	            <crumbName>Customer Testimonial</crumbName>
+	            <crumbInfo><label>Customer Testimonial</label><title>Customer Testimonial</title></crumbInfo>
+	        </action>
+	    </reference>
+	</testimonial_index_index>
+</layout>

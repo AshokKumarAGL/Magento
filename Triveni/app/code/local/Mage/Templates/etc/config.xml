@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+ <config>
+    <global>
+        <cms>
+            <layouts>
+                <new_template1>
+                    <label>Home Page</label>
+                    <template>page/homepage.phtml</template>
+                </new_template1>
+                <cmspage>
+                    <label>Default CMS Page</label>
+                    <template>page/1column-default-cms.phtml</template>
+                </cmspage>
+            </layouts>
+        </cms>   
+    </global>
+</config> 

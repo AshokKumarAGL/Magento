@@ -1,0 +1,103 @@
+/*
+ * simplyScroll 2 - a scroll-tastic jQuery plugin
+ *
+ * http://logicbox.net/jquery/simplyscroll
+ *
+ * Copyright (c) 2009-2012 Will Kelly - http://logicbox.net
+ *
+ * Dual licensed under the MIT and GPL licenses.
+ *
+ * Last revised: 31/01/2012
+ *
+ */
+
+/* Default/Master classes 
+
+Example markup format (for horizontal scroller)
+Note all DIVs are generated and should not be hard-coded
+
+<div class="your-custom-class simply-scroll-container">
+	<div class="simply-scroll-btn simply-scroll-btn-left"></div>
+	<div class="simply-scroll-btn simply-scroll-btn-right"></div>
+	<div class="simply-scroll-clip">
+		<ul class="simply-scroll-list">
+			<li>...</li>
+			...
+		</ul>
+	</div>
+</div>
+
+
+*/
+
+.simply-scroll-container { /* Container DIV - automatically generated */ position: relative; }
+.simply-scroll-clip { /* Clip DIV - automatically generated */ position: relative; overflow: hidden; }
+.simply-scroll-list { /* UL/OL/DIV - the element that simplyScroll is inited on */ overflow: hidden; margin: 0; padding: 0; list-style: none; }
+.simply-scroll-list li { padding: 0; margin: 0; list-style: none; }
+.simply-scroll-list li img { border: none; display: block; }
+.simply-scroll-btn {position:absolute; top:8px; width:6px; height:209px; z-index:9; cursor:pointer;}
+.simply-scroll-btn-left {left:-10px; background:url(../images/left_arrow.gif) no-repeat 0 0;}
+.scrollar_area .simply-scroll-btn{width:209px; height:6px;}
+
+.simply-scroll-btn-left.disabled {}
+.simply-scroll-btn-left:hover, .simply-scroll-btn-left:focus {}
+.simply-scroll-btn-right {right:-13px; background:url(../images/right_arrow.gif) no-repeat 0 0;}
+.simply-scroll-btn-right.disabled {}
+.simply-scroll-btn-right:hover, .simply-scroll-btn-right:focus {}
+.simply-scroll-btn-up {background:url(../images/up_arrow01.gif) no-repeat 0 0; top:-13px !important; left:6px;}
+.simply-scroll-btn-up.disabled {}
+.simply-scroll-btn-up:hover, .simply-scroll-btn-up:focus {}
+.simply-scroll-btn-down {background:url(../images/down_arrow01.gif) no-repeat 0 0; top:642px!important; left:6px;}
+.simply-scroll-btn-down.disabled {}
+.simply-scroll-btn-down:hover, .simply-scroll-btn-down:focus {}
+.simply-scroll-btn-pause { right: 6px; bottom: 6px; background-position: -168px -44px; }
+.simply-scroll-btn-pause:hover, .simply-scroll-btn-pause:focus { background-position: -168px -88px; }
+.simply-scroll-btn-pause.active { background-position: -84px -44px; }
+.simply-scroll-btn-pause.active:hover, .simply-scroll-btn-pause.active:focus { background-position: -84px -88px; }
+/* Custom class modifications - override classees
+
+.simply-scroll is default
+
+*/
+
+.simply-scroll { /* Customisable base class for style override DIV */ width: 965px; height:225px;}
+.simply-scroll .simply-scroll-clip { width: 965px; height: 225px; }
+.simply-scroll .simply-scroll-list { }
+.simply-scroll .simply-scroll-list li { float: left; width:140px; height: 225px; }
+.simply-scroll .simply-scroll-list li img { }
+.simply-scroll .simply-scroll-btn { }
+.simply-scroll .simply-scroll-btn-left { }
+.simply-scroll .simply-scroll-btn-left.disabled { }
+.simply-scroll .simply-scroll-btn-left:hover { }
+.simply-scroll .simply-scroll-btn-right { }
+.simply-scroll .simply-scroll-btn-right.disabled { }
+.simply-scroll .simply-scroll-btn-right:hover { }
+.simply-scroll .simply-scroll-btn-up { }
+.simply-scroll .simply-scroll-btn-up.disabled { }
+.simply-scroll .simply-scroll-btn-up:hover { }
+.simply-scroll .simply-scroll-btn-down { }
+.simply-scroll .simply-scroll-btn-down.disabled { }
+.simply-scroll .simply-scroll-btn-down:hover { }
+/* Vertical scroller example */
+
+.vert { /* wider than clip to position buttons to side */ width: 340px; height: 400px; margin-bottom: 1.5em; }
+.scrollar_area .vert{width:223px; height:633px;}
+.vert .simply-scroll-clip { width: 290px; height: 400px; }
+.scrollar_area .vert .simply-scroll-clip {width:223px; height:633px;}
+.right_section .vert {margin:0;}
+
+.vert .simply-scroll-list { }
+.vert .simply-scroll-list li { width:223px; height:220px; }
+.right_section .vert .simply-scroll-list li{height:210px;}
+
+.scrollar_area .vert .simply-scroll-list li{}
+.vert .simply-scroll-list li img { }
+.vert .simply-scroll-btn { }
+.vert .simply-scroll-btn-up { /* modified btn pos */ right: 0; top: 0; }
+.vert .simply-scroll-btn-up.disabled { }
+.vert .simply-scroll-btn-up:hover { }
+.vert .simply-scroll-btn-down { /* modified btn pos */ right: 0; top: 52px; }
+.vert .simply-scroll-btn-down.disabled { }
+.vert .simply-scroll-btn-down:hover { }
+	
+	/* NOTE left-right classes wouldn't be needed on vertical scroller */

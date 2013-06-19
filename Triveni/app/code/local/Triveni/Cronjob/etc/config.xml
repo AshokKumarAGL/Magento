@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Triveni_Cronjob>
+            <version>1.0.0</version>
+        </Triveni_Cronjob>
+    </modules>
+    <global>
+        <models>
+            <cronjob>
+                <class>Triveni_Cronjob_Model</class>
+            </cronjob>
+        </models>
+    </global>
+    <crontab>
+        <jobs>
+            <triveni_cronjob>
+                <schedule><cron_expr>0 1 * * * *</cron_expr></schedule>
+                <run><model>cronjob/observer::cronJob</model></run>
+            </triveni_cronjob>
+        </jobs>
+    </crontab>
+</config>

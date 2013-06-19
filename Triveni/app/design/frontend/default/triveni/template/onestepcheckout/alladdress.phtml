@@ -1,0 +1,47 @@
+<div class="already-account-form">
+						<input type="radio" name="default_shipping" id="default_shipping_address" /><?php echo $this->__('Use an Existing Address') ?>
+					</div>
+					<div class="scrollContentContainer">
+						<div style="float:left; padding:50px 10px 0 0">
+							<img width="7" height="16" class="scrollContentExample1BtnLeft" src="<?php echo $this->getSkinUrl('images/left-arrow.jpg') ?>">
+						</div>
+						<div class="scrollContentExample1 floatLeft scrollContentBorder" style="visibility: visible; overflow: hidden; position: relative; z-index: 2; left: 0px; width: 460px;">
+						    
+						    <ul style="margin: 0px; padding: 0px; position: relative; list-style-type: none; z-index: 1; width: 1840px; left: -460px;">
+				    	<?php 
+							$customer = Mage::getSingleton('customer/session')->getCustomer();
+							foreach ($customer->getAddresses() as $address):
+							
+								$regionModel = Mage::getModel('directory/region')->load($address['region_id']);
+								$region = $regionModel->getName();
+								
+								$countryModel = Mage::getModel('directory/country')->loadByCode($address['country_id']);
+								$countryName = $countryModel->getName();
+						?>
+						    	<li style="overflow: hidden; float: left; width: 230px; height: 100px;">
+									<p><span class="radio">
+											<input type="radio" name="old_default_shipping" id="<?php echo $address['entity_id']; ?>" onclick="return getShippinAddress('<?php echo $address['entity_id']; ?>')" />
+											<input type="hidden" name="entity_type_id" id="entity_type_id<?php echo $address['entity_type_id']; ?>" value="<?php echo $address['entity_type_id']; ?>" />
+										</span>
+										<?php echo $address['firstname'] . '&nbsp;' . $address['lastname']; ?><br>
+										<?php echo $address['street']; ?><br>
+										<?php echo $address['region']; ?> - <?php echo $address['postcode']; ?> <?php echo $countryName; ?><br>
+										<?php echo $this->__('Phone :') ?> <?php echo $address['telephone']; ?>
+									</p>
+								</li>
+						<?php endforeach; ?>
+							</ul>
+						</div>
+						<div style="float:left; padding:50px 0 0 10px">
+							<img border="1" width="7" height="16" class="scrollContentExample1BtnRight" src="<?php echo $this->getSkinUrl('images/right_arrow.jpg') ?>">
+						</div>
+					</div>
+				
+					<script type="text/javascript">
+						jQuery(".scrollContentExample1").scrollContent({
+							btnNext: ".scrollContentExample1BtnRight",
+							btnPrev: ".scrollContentExample1BtnLeft",
+							speed: 500,
+							visible: 2
+						});
+					</script>

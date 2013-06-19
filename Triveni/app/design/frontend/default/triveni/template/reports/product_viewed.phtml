@@ -1,0 +1,92 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+/* @var $this Mage_Reports_Block_Product_Viewed */
+?>
+
+<?php $collection = Mage::getSingleton('Mage_Reports_Block_Product_Viewed')->getItemsCollection(); ?>
+<?php if(count($collection) > 0): ?>
+	<div class="recent_product">
+        <h3><?php echo $this->__('Recently viewed products') ?></h3>
+		<ul id="scroller">
+          <?php 
+          		$productArray = array();
+          		$i = 1; 
+          		foreach ($collection as $_item): 
+          			array_push($productArray, $_item->getId());
+          ?>
+          <li><a href="<?php echo $_item->getProductUrl() ?>" style="text-decoration:none;">
+            <h4 title="<?php echo $this->helper('catalog/output')->productAttribute($_item, $_item->getName() , 'name') . ' - ' . $_item->getSku() ?>">
+            	<?php echo $this->helper('catalog/output')->productAttribute($_item, substr($_item->getName() . ' - ' . $_item->getSku(),0,20) , 'name') ?>...
+            </h4></a>
+            <div class="image_area"><a href="<?php echo $_item->getProductUrl() ?>"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(101, 142); ?>" width="101" height="142" alt="" /></a></div>
+            <div class="button_row">
+              		<?php if($_item->isSaleable()): ?>
+                        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="btn_buynow" onclick="setLocation('<?php echo $_item->getProductUrl() ?></button>
+                    <?php else: ?>
+                        <span><?php echo $this->__('Out of stock') ?></span>
+                    <?php endif; ?>
+              		<?php if ($this->helper('wishlist')->isAllow()) : ?>
+                         <a href="<?php echo $this->helper('wishlist')->getAddUrl($_item) ?>" style="text-decoration:none;">
+                            <button type="button" class="btn_shortlist" onclick="setLocation('<?php echo $this->helper('wishlist')->getAddUrl($_item) ?>')"></button>
+                         </a>
+                    <?php endif; ?>
+            </div>
+          </li>
+          <?php $i++; 
+          		endforeach; 
+          ?>        
+        </ul>
+   </div>
+<?php endif; ?>
+
+<?php /*
+   if ($_products = $this->getRecentlyViewedProducts()){          
+?>
+   <div class="recent_product">
+        <h3><?php echo $this->__('Recently viewed products') ?></h3>
+	<ul id="scroller">
+          <?php $i = 1; foreach ($_products as $_item): ?>
+          <li>
+            <h4 title="<?php echo $this->helper('catalog/output')->productAttribute($_item, $_item->getName() , 'name') ?>">
+            	<?php echo $this->helper('catalog/output')->productAttribute($_item, substr($_item->getName(),0,20) , 'name') ?>...</h4>
+            <div class="image_area"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(101, 142); ?>" width="101" height="142" alt="" /></div>
+            <div class="button_row">
+              		<?php if($_item->isSaleable()): ?>
+                        <button type="button" title="<?php echo $this->__('Add to Cart') ?>" class="btn_buynow" onclick="setLocation('<?php echo $_item->getProductUrl() ?></button>
+                    <?php else: ?>
+                        <span><?php echo $this->__('Out of stock') ?></span>
+                    <?php endif; ?>
+              		<?php if ($this->helper('wishlist')->isAllow()) : ?>
+                         <a href="<?php echo $this->helper('wishlist')->getAddUrl($_item) ?>" style="text-decoration:none;">
+                            <button type="button" class="btn_shortlist" onclick="setLocation('<?php echo $this->helper('wishlist')->getAddUrl($_item) ?>')"></button>
+                         </a>
+                    <?php endif; ?>
+            </div>
+          </li>
+          <?php $i++; endforeach; ?>        
+        </ul>
+   </div>
+ <?php } */ ?>

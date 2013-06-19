@@ -1,0 +1,18 @@
+<?php 
+	$testimonial = Mage::getModel('testimonial/testimonial')->getCollection()
+			->addFieldToFilter('status', array('eq'=>1)); 
+	
+?>
+<?php if (count($testimonial) > 0): ?>
+<ul class="overview" style="width: 1380px; margin-left: -129.812px;">
+	<?php $i=0; foreach ($testimonial as $obj):?>
+	<li style="float: left;">
+		<p><?php echo substr($obj['testimonial'],0,200);?></p>
+		<span><?php echo $obj['name']; ?><br /> (<?php echo $obj['address']; ?>)</span>
+	</li>
+    	<?php $i++; ?>
+	<?php endforeach; ?>
+</ul>
+<?php else: ?>
+	<p class="note-msg"><?php echo $this->__('There is no testimonial submitted.'); ?></p>
+<?php endif; ?>

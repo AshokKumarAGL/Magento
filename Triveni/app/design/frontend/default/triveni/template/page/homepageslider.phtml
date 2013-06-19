@@ -1,0 +1,72 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+
+    <div class="inner_banner" style="margin-left:0px;">
+      	<input type="hidden" name="directioncount" value="1" id="directioncount" />
+        <?php
+            $collection = Mage::getModel('bannerslider/bannerslider')->getCollection()
+                            ->addFieldToFilter('status',1)
+                            ->addFieldToFilter('is_home',0);
+            
+            $banners = array();
+            $i=1;
+            foreach ($collection as $banner) 
+            {
+                           $banners[] = $banner['filename'];
+                           $path=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+                           echo '<div  id="banner0'.$i.'" style="background: url('.$path.$banner['filename'].') no-repeat scroll center 0 transparent;float: left;height: 601px; width: 1508px;" ></div>';
+                           $i++;
+            }
+        ?>
+      </div>   
+      <div id="mainslider">
+      <div class="layout">
+        <div id="inner_container">
+          <div class="slider_section">
+            <div id="slider1"> <a class="buttons prev" href="#">&nbsp;</a>
+              <div class="viewport">
+                <ul class="overview">
+                    
+                    <?php
+                   $path=Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+                   $i=1;
+                    foreach ($collection as $banner) {
+                   
+                        echo '<li><a href="javascript:void(0);" id="slide0'.$i.'" onclick="changeclass('.$i.');"><img src="'.$path.$banner['thumbfilename'].' " width="102" height="59" /></a></li>';
+                   
+                        $i++;
+                   }
+                   ?>
+                    
+                  
+                </ul>
+              </div>
+              <a class="buttons next" href="#">&nbsp;</a> </div>
+          </div>
+        </div>
+      </div>
+    </div>

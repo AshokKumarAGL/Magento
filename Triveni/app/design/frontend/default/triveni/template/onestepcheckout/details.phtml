@@ -1,0 +1,146 @@
+<?php if(!$this->canCheckout() || !$this->validateMinimumAmount()): ?>
+    <?php if($this->settings['checkout_title']): ?>
+                <h1 class="onestepcheckout-title"><?php echo $this->settings['checkout_title']; ?></h1>
+    <?php endif; ?>
+        <?php if($this->canCheckout() && !$this->validateMinimumAmount()): ?>
+            <p><?php echo Mage::getStoreConfig('sales/minimum_order/description'); ?></p>
+            <p><a href="<?php echo $this->getUrl(''); ?>"><?php echo $this->__('Back to homepage'); ?></a></p>
+        <?php else: ?>
+            <p><?php echo $this->__('You need to have products in your cart to checkout, and your cart is empty.'); ?></p>
+            <p><a href="<?php echo $this->getUrl(''); ?>"><?php echo $this->__('Back to homepage'); ?></a></p>
+   <?php endif; ?>
+<?php else: ?>
+<?php 
+	$_billingAddress = Mage::getSingleton('core/session')->getBilling();
+	$_shipingAddress = Mage::getSingleton('core/session')->getShipping();
+	/*
+	$id = 3;
+	$data = Mage::getModel('customer/address')->load($id);
+    echo "<pre>";
+	print_r($data->getData());    
+	*/
+?>
+       <div class="login-left-main">
+       		<?php echo $this->getChildHtml('ordertabs'); ?>
+       		<form name="shippinginfo-form" id="shippinginfo-form" action="" method="post" >
+		       <div class="login-left">
+				<div class="shipping"><?php echo $this->__('I already have an account with Triveni') ?></div>
+				
+				<div class="no-account">
+					<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('triveni_existing_address')->toHtml();?>
+					<div style="width:100%; float:left;">
+						<div class="already-account-form">
+							<input type="radio" name="default_shipping" id="add_new_address" /><?php echo $this->__('Add New Address') ?>
+						</div>
+					</div>
+					
+					<div class="already-account-name">
+						<div class="row">
+							<div class="label"><?php echo $this->__('Name *') ?></div>
+							<div class=""><input type="text" name="shipping_firstname" id="shipping_firstname" class="inputlong" /></div>
+						</div>
+						<div class="row">
+							<div class="label"><?php echo $this->__('Phone') ?></div>
+							<div class="">
+								<select class="select" name="shipping_ext" id="shipping_ext">
+									<option>+ 1</option>
+									<option>+ 2</option>
+									<option>+ 91</option>
+									<option>+ 21</option>
+									<option>+ 11</option>
+								</select>
+								<input type="text" class="inputphone" name="shipping_telephone" id="shipping_telephone" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="label"><?php echo $this->__('Address *') ?></div>
+							<div class=""><input type="text" class="inputlong" name="shipping_street" id="shipping_street1" /></div>
+						</div>
+						<div class="row">
+							<div class="label"><?php echo $this->__('City ') ?></div>
+							<div class=""><input type="text" class="inputcity" name="shipping_city" id="shipping_city" /></div>
+							<div class="label"><?php echo $this->__('Zip/Pin') ?></div>
+							<div class=""><input type="text" name="shipping_postcode" id="shipping_postcode" class="inputcity" /></div>
+						</div>
+						<div class="row">
+							<div class="label"><?php echo $this->__('Country') ?></div>
+							<div class="">
+								<select class="selectbig" name="shipping_country_id" id="shipping_country_id">
+                                 <option value="">Select Country</option>
+	                             <?php 
+	                                  $collection = Mage::getModel('directory/country')->getCollection();
+									  foreach ($collection as $country){ 
+								 ?>
+									<option value="<?php echo $country->getId(); ?>" <?php if($_shipingAddress['country_id'] == $country->getId()){ echo $_shipingAddress['country_id']; } ?>><?php echo $country->getName(); ?></option>
+								<?php } ?>
+                             	</select>
+                             </div>
+							<div class="label"><?php echo $this->__('State') ?></div>
+							<div class="">
+                                <input type="text" id="shipping_region" name="shipping_region" value="<?php echo $this->escapeHtml($this->getAddress()->getRegion()) ?>" title="<?php echo $this->__('State/Province') ?>" class="input-text <?php echo $this->helper('customer/address')->getAttributeValidationClass('region') ?>" />
+							</div>
+						</div>
+						<div class="addaddress">
+						
+							<div id="customer-login-loading" style="display: none; width:25px;" class="loading-ajax">&nbsp;</div>
+							<div id="customer-login-error" class="customer-error" style="display: none;">&nbsp;</div>
+				       		
+							<input id="addnewAddress"  type="submit" value=""  style="background:url('<?php echo $this->getSkinUrl('images/add-address.jpg');?>') no-repeat; width:92px; height:29px; border:none;" class="btn_proceed" />
+						</div>
+					</div>
+					
+				</div>
+		
+				<div class="shipping"><?php echo $this->__('Shipping Method') ?></div>
+				<div class="shipping-method-data">
+					<p><input type="radio" value="Blue Dart" name="shipping_method" id="blueDart" /><?php echo $this->__('Blue Dart. Charges Rs 120. Estimate Delivery - 7th March 2013') ?></p>
+					<p><input type="radio" value="DTDC" name="shipping_method" id="dtdc" /><?php echo $this->__('DTDC. Charges Rs 50. Estimate Delivery - 9th March 2013') ?></p>
+				</div>
+			</div>
+			
+			<div class="proceed">
+				<input type="hidden" name="shippingAddressHidden" id="shippingAddressHidden" value="" />
+				<input type="submit" id="detailProceedButton" name="detailProceedButton" value="" style="background:url('<?php echo $this->getSkinUrl('images/proceed.gif');?>') no-repeat; width:169px; height:35px; border:none;" />
+			</div>
+			</form>
+		</div>
+		
+       <div class="login-right"><?php echo $this->getChildHtml('newsummary'); ?></div>       
+       <script>var customForm = new VarienForm('shippinginfo-form');</script>
+       <script type="text/javascript">
+			var jquery = jQuery.noConflict();			
+
+			function getShippinAddress(data){
+				document.getElementById('shippingAddressHidden').value = data;
+				document.getElementById('default_shipping_address').checked = true;
+			}
+			
+			function callajaxsaveaddress(e){
+				 var baseUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK); ?>';
+			     var loading = $('customer-login-loading');
+			     var error = $('customer-login-error');
+			     error.hide();
+			     loading.show();
+			     var form = $('shippinginfo-form');
+			     var url = baseUrl+'customer/address/savenewaddress';
+			     new Ajax.Request(url, {
+		                parameters: form.serialize(true),
+		                method: 'POST',
+		                onComplete: function(transport) { 
+		                        if(transport.status == 200) {
+		                        var result = transport.responseText.evalJSON();
+		                        if(!result.success) {
+		                            loading.hide();
+		                            error.update(result.error);
+		                            error.show();
+		                        } else {
+		                           window.location=baseUrl+'onestepcheckout/index/detail';
+		                        }
+		                    }
+		                }
+		            });
+			}
+			$('addnewAddress').observe('click', callajaxsaveaddress);
+		</script>
+
+<?php endif; ?>	

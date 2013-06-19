@@ -1,0 +1,36 @@
+<config>
+    <menu>
+        <miscellaneous translate="title" module="customsize">
+            <title>Miscellaneous</title>
+            <sort_order>70</sort_order>
+            <depends>
+                <module>Triveni_Customsize</module>
+            </depends>
+            <children>
+                <customsize translate="title" module="customsize">
+                    <title>Manage Custom Size</title>
+                    <action>customsize/adminhtml_customsize</action>
+                    <sort_order>30</sort_order>
+                </customsize>
+            </children>
+        </miscellaneous>
+    </menu>
+	<acl>
+        <resources>
+            <admin>
+                <children>
+                    <miscellaneous translate="title" module="customsize">
+                        <title>Customsize Management</title>
+                        <sort_order>400</sort_order>
+                        <children>
+                            <customsize translate="title">
+                                <title>Add Customsize</title>
+                                <sort_order>10</sort_order>
+                            </customsize>
+                        </children>
+                    </miscellaneous>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

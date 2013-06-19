@@ -1,0 +1,313 @@
+<?php
+/**
+ * One page checkout payment methods
+ *
+ * @see Mage_Checkout_Block_Onepage_Payment_Methods
+ */
+?>
+
+<?php
+/* for citrus done by komal -- id with citrun name, bankOptions, netBankingOptions are added for citrus gateway*/
+$helper = Mage::helper('onestepcheckout/checkout');
+
+$cats = array(); $couponCanUse = true;
+
+$hide_nonfree_methods = false;
+if($helper->settings['hide_nonfree_payment_methods'])   {
+    foreach($this->getMethods() as $_method)    {
+        if($_method->getCode() == 'free')   {
+            $hide_nonfree_methods = true;
+        }
+    }
+}
+
+?>
+<div class="payment-methods">
+
+<script type="text/javascript">
+//<![CDATA[
+  <?php echo $this->getChildHtml('reward.scripts'); ?>
+  <?php echo $this->getChildHtml('customerbalance_scripts'); ?>
+  var payment = new Payment('checkout-payment-method-load', '<?php echo $this->getUrl('checkout/onepage/savePayment') ?>');
+//]]>
+</script>
+    <?php if(str_replace('.', '', Mage::getVersion()) > 1600):?>
+        <?php echo $this->getChildHtml('customerbalance'); ?>
+        <?php echo $this->getChildHtml('reward.points'); ?>
+    <?php endif;?>
+    <dl id="checkout-payment-method-load">
+    <?php foreach ($this->getMethods() as $_method): $_code = $_method->getCode() ?>
+    	
+    	<?php if($hide_nonfree_methods && $_code != 'free') continue;?>
+	        <dt class="p-method-label">
+	        <?php if( sizeof($this->getMethods()) > 1 ): ?>
+	            <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->htmlEscape($_method->getTitle()) ?>" class="radio" <?php if($this->getSelectedMethodCode()==$_code || ($hide_nonfree_methods && $_code == 'free')): ?> checked="checked"<?php endif; ?> />
+	        <?php else: ?>
+	            <span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" /></span>
+	        <?php endif; ?>
+	            <label for="p_method_<?php echo $_code ?>"><?php echo $_method->getTitle() ?></label>
+	        </dt>
+	        <?php if($html = $this->getChildHtml('payment.method.'.$_code)): ?>
+	        <dd id="container_payment_method_<?php echo $_code; ?>" class="payment-method">
+	            <?php echo $html; ?>
+	        </dd>
+	    <?php endif; ?>
+	    
+    <?php endforeach; ?>
+    </dl>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+var checkout = new Checkout();
+$$('#checkout-payment-method-load dt input').invoke('observe', 'click', function(e) {
+    //$('onestepcheckout-place-order').hide();
+    
+	var element = e.element();
+    var name = 'payment_form_' + element.getValue();
+    payment.currentMethod = element.getValue();
+    /* Hide all other forms */
+    //$$('dd.payment-method').invoke('hide');
+
+    if(element.checked) {
+        var form = $(name);
+        var container = $('container_payment_method_' + element.getValue());
+
+        if(element !== null && container !== null)    {
+            container.show();
+            $(name).show();
+        }
+    }
+});
+
+var tabjx = jQuery.noConflict();
+/* for citrus done by komal -- id with citrun name, bankOptions, netBankingOptions are added for citrus gateway*/
+tabjx('#netBankingOptions').change(function() {
+    if(tabjx('#netBankingOptions').val()!=''){tabjx('#bankOptions').val('citrusNetBanking');} 
+    else {tabjx('#bankOptions').val('');}
+	tabjx('#p_method_citrus_standard').trigger('click');
+});
+
+tabjx('#bankOptions').click(function() {
+    tabjx('#netBankingOptions').show();tabjx('#NonMotoCardType').hide();tabjx('#netBankingCards').hide();
+	tabjx('#cardOption1').attr('checked',false);tabjx('#cardOption1').val('');tabjx('#netBankingCards').val('');	
+	tabjx('#cardOption2').attr('checked',false);tabjx('#cardOption2').val('');tabjx('#NonMotoCardType').val('');
+    tabjx('#p_method_icici_standard').attr('checked',false);tabjx('#p_method_checkmo').attr('checked',false);
+    tabjx('#p_method_avenues_standard').attr('checked',false);
+});
+
+tabjx('#netBankingCards').change(function() {
+    if(tabjx('#netBankingCards').val()!=''){tabjx('#cardOption1').val('netBanking');} 
+    else {tabjx('#cardOption1').val('');}
+    tabjx('#cardOption2').val('');tabjx('#NonMotoCardType').val('');tabjx('#p_method_avenues_standard').trigger('click');
+});
+
+tabjx('#NonMotoCardType').change(function() {
+    if(tabjx('#NonMotoCardType').val()!=''){tabjx('#cardOption2').val('nonMoto');} 
+    else {tabjx('#cardOption2').val('');}
+    tabjx('#cardOption1').val('');tabjx('#netBankingCards').val('');tabjx('#p_method_avenues_standard').trigger('click');
+});
+
+tabjx('#cardOption1').click(function() {
+    tabjx('#NonMotoCardType').hide();tabjx('#netBankingCards').show();tabjx('#cardOption2').attr('checked',false);
+    tabjx('#p_method_icici_standard').attr('checked',false);tabjx('#p_method_checkmo').attr('checked',false);
+    tabjx('#bankOptions').attr('checked',false);tabjx('#netBankingOptions').hide();
+});
+
+tabjx('#cardOption2').click(function() {
+    tabjx('#netBankingCards').hide();tabjx('#NonMotoCardType').show();tabjx('#cardOption1').attr('checked',false);
+    tabjx('#p_method_icici_standard').attr('checked',false);tabjx('#p_method_checkmo').attr('checked',false);
+	tabjx('#bankOptions').attr('checked',false);tabjx('#netBankingOptions').hide();
+});
+tabjx('#p_method_icici_standard').click(function() {
+    tabjx('#netBankingCards').hide();tabjx('#NonMotoCardType').hide();tabjx('#cardOption1').attr('checked',false);
+    tabjx('#cardOption2').attr('checked',false);tabjx('#p_method_checkmo').attr('checked',false);
+    tabjx('#p_method_icici_standard').attr('checked',true);
+	tabjx('#bankOptions').attr('checked',false);tabjx('#netBankingOptions').val('');tabjx('#netBankingOptions').hide();
+});
+tabjx('#p_method_hdfc_standard').click(function() {
+    tabjx('#netBankingCards').hide();tabjx('#NonMotoCardType').hide();tabjx('#cardOption1').attr('checked',false);
+    tabjx('#cardOption2').attr('checked',false);tabjx('#p_method_checkmo').attr('checked',false);
+    tabjx('#p_method_icici_standard').attr('checked',false);
+    tabjx('#p_method_hdfc_standard').attr('checked',true);
+	tabjx('#bankOptions').attr('checked',false);tabjx('#netBankingOptions').val('');tabjx('#netBankingOptions').hide();
+});
+tabjx('#p_method_checkmo').click(function() {
+    tabjx('#netBankingCards').hide();tabjx('#NonMotoCardType').hide();
+    tabjx('#cardOption1').attr('checked',false);tabjx('#cardOption2').attr('checked',false);
+    tabjx('#p_method_icici_standard').attr('checked',false);
+    tabjx('#p_method_checkmo').attr('checked',true);
+	tabjx('#bankOptions').attr('checked',false);tabjx('#netBankingOptions').val('');tabjx('#netBankingOptions').hide();
+});
+
+<?php if(Mage::helper('onestepcheckout')->isEnterprise() && Mage::helper('customer')->isLoggedIn()):?>
+//if we have a enterprise version we should include this
+
+rPoints = $('use_reward_points');
+if(rPoints){
+    if(rPoints.checked){
+        payment.switchRewardPointsCheckbox();
+    }
+}
+cBalance = $('use_customer_balance');
+if(cBalance){
+    if(cBalance.checked){
+        payment.switchCustomerBalanceCheckbox();
+    }
+}
+//if we have a enterprise version we should include this end
+<?php endif;?>
+
+payment.currentMethod = "<?php echo $this->getQuote()->getPayment()->getMethod() ?>";
+//]]>
+</script>
+<script type="text/javascript">
+document.observe('dom:loaded', function() {
+    if ($$('div.shopping-cart-totals').length == 1) {
+    }
+    else {
+        $(document.body).insert($('onestepcheckout-login-popup'));
+        $(document.body).insert($('onestepcheckout_popup_overlay'));
+        $(document.body).insert($('onestepcheckout-toc-popup'));
+
+        /* Handle place order click event */
+        $('onestepcheckout-place-order').observe('click', function(e)   {
+
+
+            // First validate the form
+            var form = new VarienForm('onestepcheckout-form');
+            var addressExp = /[A-Z][A-Z0-9_,\/-]*$/i;
+
+            if(!form.validator.validate())  {
+                if(!addressExp.test(document.getElementById("billing:street1").value)){
+                    document.getElementById("billing:street1").className = 'input-text required-entry validation-failed';
+                }
+
+
+                console.log('validation failed');
+                Event.stop(e);
+            } else {
+				if (jQuery('input[name=chooseAddr]').is(':checked') ) {
+					if (jQuery('input[name=billing_address_id]').is(':checked') ) {
+						 if ( jQuery('#p_method_moto').is(':checked') || jQuery('#p_method_checkmo').is(':checked') || jQuery('#p_method_free').is(':checked') ) {
+							var elem = e.element();
+							elem.disabled = true;
+							$('onestepcheckout-form').submit();
+						  }else{
+							jQuery('#payment_error_jq').show();
+							}
+					}else{
+						jQuery('#billing_error_msg').show();
+						}
+				}else{
+						if ( jQuery('#p_method_moto').is(':checked') || jQuery('#p_method_checkmo').is(':checked') || jQuery('#p_method_free').is(':checked') ) {
+							var elem = e.element();
+							elem.disabled = true;
+							$('onestepcheckout-form').submit();
+						 }else{
+							jQuery('#payment_error_jq').show();
+						 }
+				}
+            }
+        });
+
+
+        // This is a separate page
+        var url = 'http://swat.bestylish.com/onestepcheckout/ajax/set_methods_separate/';
+        var update_payments = false;
+        $$('dl.shipment-methods input').invoke('observe', 'click', get_separate_save_methods_function(url, update_payments));
+        $$('div.payment-methods input[name^=payment\[method\]]').invoke('observe', 'click', get_separate_save_methods_function(url));
+
+        $$('div.payment-methods input[name^=payment\[method\]]').invoke('observe', 'click', function() {
+            $$('div.onestepcheckout-payment-method-error').each(function(item) {
+                new Effect.Fade(item);
+            });
+        });
+
+        $$('dl.shipment-methods input').invoke('observe', 'click', function() {
+            $$('div.onestepcheckout-shipment-method-error').each(function(item) {
+                new Effect.Fade(item);
+            });
+        });
+
+        var has_hidden_terms = false;
+
+        if($('id_accept_terms') != null)    {
+
+            $('id_accept_terms').observe('click', function(e)   {
+                var element = e.element();
+
+                if(element.checked) {
+                    $$('div.onestepcheckout-terms-error').each(function(item) {
+                        new Effect.Fade(item);
+                        has_hidden_terms = true;
+                    });
+                }
+                else    {
+                    if(has_hidden_terms)    {
+                        $$('div.onestepcheckout-terms-error').each(function(item) {
+                            new Effect.Appear(item);
+                            has_hidden_terms = false;
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    var form = $('onestepcheckout-form');
+    if($RF(form, 'payment[method]') != null)    {
+        try {
+            var payment_method = $RF(form, 'payment[method]');
+            $('container_payment_method_' + payment_method).show();
+            $('payment_form_' + payment_method).show();
+        } catch(err)    {
+
+        }
+    }
+
+    if($RF(form, 'shipping_method') == null)    {
+        try {
+            var method = 'freeshipping_freeshipping';
+            if(method != '')    {
+                $('s_method_' + method).checked = true;
+                get_separate_save_methods_function(url)();
+            }
+        } catch(err)    {
+
+        }
+    }
+
+   get_separate_save_methods_function(url)();
+
+    $('billing:use_for_shipping_yes').observe('click', function(e)  {
+        var element = e.element();
+        if(element.getValue() == "1"){
+            $('shipping_address').hide();
+        } else {
+            if($('shipping-address-select') && $('shipping-address-select').value == ''){
+                $('shipping_address_list').show()
+            }
+            $('shipping_address').show();
+                                    if(!$('shipping-address-select') && $('shipping_address_list').getStyle('display')=='none'){
+                $('shipping_address_list').show()
+            }
+                    }
+
+
+    });
+
+
+    if($('payment-tool-tip-close')){ Event.observe($('payment-tool-tip-close'), 'click', toggleToolTip);}
+    $$('.cvv-what-is-this').each(function(element){Event.observe(element, 'click', toggleToolTip);});
+});
+
+function toggleToolTip(event){
+    if($('payment-tool-tip')){
+        $('payment-tool-tip').setStyle({left: (Event.pointerX(event)-100)+'px',top: (Event.pointerY(event)-300)+'px'});
+        $('payment-tool-tip').toggle();
+    }
+    Event.stop(event);
+}
+
+</script>
